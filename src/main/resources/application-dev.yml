@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.91.129:3306/blog?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false
+    username: root
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+# 日志配置
+logging:
+  level:
+    root: info
+    com.colm.blog: debug
+  file:
+    path: log/
+    name: blog-dev.log
