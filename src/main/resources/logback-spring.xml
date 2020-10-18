@@ -15,7 +15,7 @@
     -->
     <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36}:%L- %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %logger{36}:%L- %msg%n</pattern>
             <!-- 日志编码 -->
             <charset class="java.nio.charset.Charset">UTF-8</charset>
         </encoder>

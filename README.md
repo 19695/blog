@@ -48,3 +48,26 @@ Hint: Some lines were ellipsized, use -l to show in full.
 IDEA 的编码一定要改
 
 settings >> Editor >> File Encodings
+
+
+
+IDEA 不重启更新代码
+
+https://blog.csdn.net/JunSIrhl/article/details/103995646
+
+
+
+edit run/debug configuration >> tomcat server >> vm options >> 两个都设置为 update classes and resources
+
+然后在 build >> recompile ...
+
+
+
+logback 给日志添加颜色，让信息更醒目
+
+https://www.cnblogs.com/sxdcgaq8080/p/7885340.html
+
+```xml
+<pattern>%black(控制台-) %red(%d{yyyy-MM-dd HH:mm:ss}) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)</pattern>
+```
+
