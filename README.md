@@ -71,3 +71,14 @@ https://www.cnblogs.com/sxdcgaq8080/p/7885340.html
 <pattern>%black(控制台-) %red(%d{yyyy-MM-dd HH:mm:ss}) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)</pattern>
 ```
 
+
+
+aop概念及各种名词复习：https://blog.csdn.net/changudeng1992/article/details/80625134
+
+springmvc中几种获取路径方式对比：https://www.cnblogs.com/wang3680/p/4210830063c46be1b0e1144ae72ea806.html
+
+
+
+统一异常处理
+
+AOP日志处理
