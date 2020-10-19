@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="">
     <meta charset="UTF-8">
     <!--  移动端适配  -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--  CDN导入样式  -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.4/dist/semantic.min.css">
     <!--  导入自定义css  -->
-    <link rel="stylesheet" href="../../static/css/complement.css">
+    <link rel="stylesheet" href="../../static/css/complement.css" th:href="@{/css/complement.css}">
     <title>博客管理</title>
 </head>
 <body>
@@ -208,7 +208,7 @@
                 <div class="three wide column">
                     <div class="ui inverted link list">
                         <div class="item">
-                            <img title="hello!" src="../../static/images/myblog.png" alt="Contact me" class="ui rounded image" style="width: 110px">
+                            <img title="hello!" src="../../static/images/myblog.png" th:src="@{/images/myblog.png}" alt="Contact me" class="ui rounded image" style="width: 110px">
                         </div>
                     </div>
                 </div>

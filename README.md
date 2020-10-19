@@ -141,6 +141,23 @@ public class Blog {
 
 
 
+配置 format_sql：http://leeyk.cn/?p=168
+
+```yml
+spring:
+  jpa:
+    show-sql: true #显示sql语句
+    hibernate:
+      ddl-auto: update  # 配置开启自动更新表结构
+    database: mysql
+    properties:
+      hibernate:
+        format_sql: true  #格式化sql语句
+    open-in-view: true
+```
+
+
+
 PO、VO：https://www.cnblogs.com/cuiqq/p/11089279.html
 
 

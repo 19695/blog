@@ -20,28 +20,13 @@ public class IndexController {
 //        return "index";
         return "index";
     }
-    @GetMapping("/about")
-    public String about() {
-        return "about";
+
+    @GetMapping("/blogs")
+    public String blogs(){
+        return "admin/blogs";
     }
-    @GetMapping("/archives")
-    public String archives() {
-        return "archives";
+    @GetMapping("/input")
+    public String input(){
+        return "admin/index";
     }
-    @GetMapping("/blog")
-    public String blog() {
-        return "blog";
-    }
-    @GetMapping("/tags")
-    public String tags() {
-        return "tags";
-    }
-    @GetMapping("/types")
-    public String types() {
-        return "types";
-    }
-     @GetMapping("/error")
-    public void error() {
-        throw new BlogNotFoundException("xx");
-     }
 }
