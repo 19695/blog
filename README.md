@@ -3,7 +3,8 @@ blog 的 springboot 后端服务
 
 ## Thymeleaf
 spring-boot-stater-thymeleaf 默认导入的版本是2.3
-3更好用，性能更好
+
+建议使用3更好用，性能更好
 
 
 
@@ -76,6 +77,31 @@ https://www.cnblogs.com/sxdcgaq8080/p/7885340.html
 aop概念及各种名词复习：https://blog.csdn.net/changudeng1992/article/details/80625134
 
 springmvc中几种获取路径方式对比：https://www.cnblogs.com/wang3680/p/4210830063c46be1b0e1144ae72ea806.html
+
+
+
+将页面工程导入到idea，注意本地资源的引用，由于使用了thymeleaf模板引擎需要做出相应的修改
+
+```html
+<link rel="stylesheet" href="../static/css/complement.css" th:href="@{/css/complement.css}">
+```
+
+这样一个个改太慢了，可以使用fragment
+
+
+
+fragment应用于script引用部分
+
+```html
+<!--/*/<th:block>/*/-->
+	    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+
+<!--/*/</th:block>/*/-->
+```
+
+这种写法打开静态页面的时候是完全注释掉th的，但使用thymeleaf模板引擎的时候又是可用的
+
+
 
 
 
