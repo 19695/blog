@@ -103,8 +103,50 @@ fragment应用于script引用部分
 
 
 
+实体关系
+
+Blog n--------1 Type
+
+Blog n--------n Tag
+
+Blog n--------1 User
+
+Blog 1--------n Comment
+
+
+
+评论类自关联关系
+
+parentComment 1-------n replayComment
+
+
+
+避坑：之前踩过
+
+```java
+@Entity
+@Table(name = "t_blog")
+public class Blog {
+    // 这里巨坑无比，注意使用javax.persistence.Id
+    @Id
+    @GeneratedValue
+    private Long id;
+    ...
+}
+```
+
+> import org.springframework.data.annotation.Id;
+>
+> import javax.persistence.Id; 使用这个
+
+
+
+PO、VO：https://www.cnblogs.com/cuiqq/p/11089279.html
+
 
 
 统一异常处理
 
 AOP日志处理
+
+导入模板页面修改fragment
