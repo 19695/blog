@@ -162,6 +162,30 @@ PO、VO：https://www.cnblogs.com/cuiqq/p/11089279.html
 
 
 
+SpringBoot2.0（官方推荐）
+
+```java
+@Configuration
+public class WebMvcConfg implements WebMvcConfigurer {
+}
+```
+
+SpringBoot2.0以前版本
+
+```java
+@Configuration
+public class WebMvcConfig extends WebMvcConfigurerAdapter {
+｝
+```
+
+
+
+IDEA查看继承树 ctrl alt u
+
+查看继承层次结构 CTRL h
+
+
+
 统一异常处理
 
 AOP日志处理

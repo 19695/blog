@@ -63,6 +63,22 @@ body {
     margin-top: 0.5em !important;
     margin-bottom: 0.5em !important;
 }
+.m-margin-tb {
+    margin-top: 1em !important;
+    margin-bottom: 1em !important;
+}
+.m-margin-tb-large {
+    margin-top: 2em !important;
+    margin-bottom: 2em !important;
+}
+.m-margin-tb-big {
+    margin-top: 3em !important;
+    margin-bottom: 3em !important;
+}
+.m-margin-tb-huge {
+    margin-top: 4em !important;
+    margin-bottom: 4em !important;
+}
 .m-margin-top-small {
     margin-top: 0.5em !important;
 }
