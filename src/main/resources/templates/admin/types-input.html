@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <!--  移动端适配  -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--  CDN导入样式  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.4/dist/semantic.min.css">
+    <!--  导入自定义css  -->
+    <link rel="stylesheet" href="../../static/css/complement.css" th:href="@{/css/complement.css}">
+    <!-- css for markdown editor -->
+    <link rel="stylesheet" href="../../static/lib/editormd/css/editormd.min.css" th:href="@{/lib/editormd/css/editormd.min.css}">
+    <title>新增分类</title>
+</head>
+<body>
+
+    <!--导航-->
+    <nav th:replace="admin/_fragments :: menu('分类')" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+        <div class="ui container">
+            <!-- stackable 可堆叠的，移动端的时候可自适应 -->
+            <div class="ui inverted secondary stackable menu">
+                <h2 class="ui teal header item">Blog</h2>
+                <!-- m-item 为选择器定位 -->
+                <a href="#" class="m-item item m-mobile-hide"><i class="small home icon"></i>博客</a>
+                <a href="#" class="active m-item item m-mobile-hide"><i class="small idea icon"></i>分类</a>
+                <a href="#" class="m-item item m-mobile-hide"><i class="small tags icon"></i>标签</a>
+               <div class="m-item right menu m-mobile-hide">
+                   <div class="ui dropdown item" id="user_dropdown">
+                       <div class="text">
+                           <img src="https://picsum.photos/id/1/100/100" alt="" class="ui avatar image">
+                           xxxx
+                       </div>
+                       <i class="dropdown icon"></i>
+                       <div class="menu">
+                           <a href="#" class="item">注销</a>
+                       </div>
+                   </div>
+               </div>
+            </div>
+        </div>
+        <!-- toggle没有样式，只是为了选择器定位 -->
+        <a href="#" class="ui menu toggle black icon button m-top-right m-mobile-show">
+            <i class="sidebar icon"></i>
+        </a>
+    </nav>
+    <!-- 二级导航 -->
+    <div class="ui attached pointing menu">
+        <div class="ui container">
+            <div class="right menu">
+                <a href="#" class="active teal item">新增</a>
+                <a href="#" class="item">列表</a>
+            </div>
+        </div>
+    </div>
+
+
+    <!--中间内容-->
+    <div class="m-container m-padded-tb-big" style="min-height: 60%">
+        <!-- container 提供不同设备适配能力 -->
+        <div class="ui container">
+            <form action="#" method="post" class="ui form" th:action="@{/admin/types}">
+                <!-- 首图引用 -->
+                <div class="field">
+                    <div class="ui left labeled input">
+                        <label class="ui teal basic label">分类名称</label>
+                        <!-- 输入框name应和封装的对象属性名一致 -->
+                        <input type="text" name="name" placeholder="分类名称">
+                    </div>
+                </div>
+
+                <!-- validation error message -->
+                <div class="ui error message"></div>
+
+                <!-- buttons -->
+                <div class="ui right aligned container">
+                    <!-- type默认是提交 -->
+                    <button type="button" class="ui secondary basic button" onclick="window.history.go(-1)">返回</button><!--  style="border-style: solid !important" -->
+                    <button class="ui teal submit button">添加</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br/>
+    <br/>
+    <br/>
+
+    <!--底部-->
+    <footer class="ui inverted vertical segment m-padded-tb-massive">
+        <!-- 样式之间顺序需要注意center aligned反过来不行 -->
+        <div class="ui center aligned container">
+            <div class="ui inverted divided stackable grid">
+                <div class="three wide column">
+                    <div class="ui inverted link list">
+                        <div class="item">
+                            <img title="hello!" src="../../static/images/myblog.png" th:src="@{/images/myblog.png}" alt="Contact me" class="ui rounded image" style="width: 110px">
+                        </div>
+                    </div>
+                </div>
+                <div class="three wide column">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced">最新博客</h4>
+                    <div class="ui inverted link list">
+                        <a href="#" class="item">用户故事</a>
+                        <a href="#" class="item">用户故事</a>
+                        <a href="#" class="item">用户故事</a>
+                    </div>
+                </div><div class="three wide column">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced">联系我</h4>
+                    <div class="ui inverted link list">
+                        <a href="#" class="item">WeChat: xxxxx</a>
+                        <a href="#" class="item">Mobile: xxxxx</a>
+                        <a href="#" class="item">QQ: xxxxx</a>
+                    </div>
+                </div>
+                <div class="seven wide column">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced">Colm Alex</h4>
+                    <p class="m-text-thin m-text-spaced m-opacity-mini">我也曾把光阴浪费甚至莽撞到视死如归，只因爱上你才渴望长命百岁。——陈小春《相依为命》</p>
+                </div>
+            </div>
+            <!-- 分割线 -->
+            <div class="ui inverted section divider"></div>
+            <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2019 - 2020 Colm Alex Design by Lirenmi Build by Colm Alex</p>
+        </div>
+    </footer>
+
+    <!-- CDN导入jquery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <!-- CDN导入js -->
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script>
+        /* mobile sidebar icon */
+        $('.menu.toggle').click(function(){
+            $('.m-item').toggleClass('m-mobile-hide');
+        });
+        /* 注销 */
+        $('#user_dropdown').dropdown({
+            on : 'hover'
+        });
+        /* 表单验证 */
+        $('.ui.form').form({
+            fields: {
+                type_name: {
+                    identifier: 'type_name',
+                    rules: [{
+                        type: 'empty',
+                        prompt: '请输入分类名称'
+                    }]
+                }
+            },
+
+        });
+    </script>
+</body>
+</html>

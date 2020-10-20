@@ -186,8 +186,28 @@ IDEA查看继承树 ctrl alt u
 
 
 
+```java
+@Transactional
+@Override
+public Type saveType(Type type) {
+    return typeRepository.save(type);
+}
+```
+
+使用的是 import org.springframework.transaction.annotation.Transactional;
+
+
+
+
+
+
+
 统一异常处理
 
 AOP日志处理
 
 导入模板页面修改fragment
+
+实体类生成对应数据库表
+
+管理员登录推出，权限拦截，MD5加密

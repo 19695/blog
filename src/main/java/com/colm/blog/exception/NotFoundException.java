@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 // 只有加上这个才能找到404页面(同时在ControllerExceptionHandler中做出响应处理)，不然走到error/error
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class BlogNotFoundException extends java.lang.RuntimeException {
+public class NotFoundException extends java.lang.RuntimeException {
 
-    public BlogNotFoundException() {
+    public NotFoundException() {
     }
 
-    public BlogNotFoundException(String message) {
+    public NotFoundException(String message) {
         super(message);
     }
 
-    public BlogNotFoundException(String message, Throwable cause) {
+    public NotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
 }

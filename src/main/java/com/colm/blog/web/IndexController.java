@@ -1,9 +1,7 @@
 package com.colm.blog.web;
 
-import com.colm.blog.exception.BlogNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * Created by Colm on 2020/10/18
@@ -15,7 +13,7 @@ public class IndexController {
 //        int i = 8/0;
 //        String blog = null;
 //        if (blog == null) {
-//           throw new BlogNotFoundException("博客不存在");
+//           throw new NotFoundException("博客不存在");
 //        }
 //        return "index";
         return "index";

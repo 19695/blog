@@ -17,9 +17,9 @@
         <div class="ui inverted secondary stackable menu">
             <h2 class="ui teal header item">Blog</h2>
             <!-- m-item 为选择器定位 -->
-            <a href="#" class="m-item item m-mobile-hide" th:classappend="${page == '博客'} ? 'active'"><i class="small home icon"></i>博客</a>
-            <a href="#" class="m-item item m-mobile-hide" th:classappend="${page == '分类'} ? 'active'"><i class="small idea icon"></i>分类</a>
-            <a href="#" class="m-item item m-mobile-hide" th:classappend="${page == '标签'} ? 'active'"><i class="small tags icon"></i>标签</a>
+            <a href="#" th:href="@{/admin/blogs}" class="m-item item m-mobile-hide" th:classappend="${page == '博客'} ? 'active'"><i class="small home icon"></i>博客</a>
+            <a href="#" th:href="@{/admin/types}" class="m-item item m-mobile-hide" th:classappend="${page == '分类'} ? 'active'"><i class="small idea icon"></i>分类</a>
+            <a href="#" th:href="@{/admin/tags}" class="m-item item m-mobile-hide" th:classappend="${page == '标签'} ? 'active'"><i class="small tags icon"></i>标签</a>
             <div class="m-item right menu m-mobile-hide">
                 <div class="ui dropdown item">
                     <div class="text">
