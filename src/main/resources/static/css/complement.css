@@ -15,6 +15,18 @@ body {
 .m-padded {
     padding: 1em !important;
 }
+.m-padded-large {
+    padding: 2em !important;
+}
+.m-padded-big {
+    padding: 3em !important;
+}
+.m-padded-huge {
+    padding: 4em !important;
+}
+.m-padded-massive {
+    padding: 5em !important;
+}
 .m-padded-tb-mini {
     /*  1em 为14个像素  */
     /*  ui自带的样式级别很高，需要提高自定义样式的级别  */

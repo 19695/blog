@@ -365,6 +365,15 @@ URL 对比
 
 
 
+让IDEA更友好 https://www.cnblogs.com/zhou2016/p/5545800.html
+Ctrl+Alt+O	自动import和去除没用的import
+
+
+
+thymeleaf + ajax ：https://www.cnblogs.com/zhangruifeng/p/12347419.html
+
+
+
 统一异常处理
 
 AOP日志处理
