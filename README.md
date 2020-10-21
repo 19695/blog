@@ -1,4 +1,5 @@
 # blog
+
 blog 的 springboot 后端服务
 
 ## Thymeleaf
@@ -198,7 +199,169 @@ public Type saveType(Type type) {
 
 
 
+新增type的非空校验
 
+1. 可以这么做
+
+前端
+
+```html
+<!--/*/
+<div class="ui error message" th:unless="${#strings.isEmpty(message)}">
+<i class="close icon"></i>
+<div class="header">提示：</div>
+<p th:text="${message}"></p>
+</div>
+/*/-->
+```
+
+后端
+
+```java
+/**
+  * 新增操作
+  * @return
+  */
+@PostMapping("/types")
+public String save(Type type, RedirectAttributes attributes, Model model) {
+    if (StringUtils.isEmpty(type.getName())) {
+        model.addAttribute("message", "名称不能为空");
+        return "admin/types-input";
+    }
+   	...
+}
+```
+
+2. 也可以这么做
+
+```xml
+<!-- 需要添加依赖 -->
+<dependency>
+    <groupId>org.hibernate.validator</groupId>
+    <artifactId>hibernate-validator</artifactId>
+    <version>6.1.6.Final</version>
+</dependency>
+```
+
+前端修改
+
+```html
+<form action="#" method="post" class="ui form" th:object="${type}" th:action="@{/admin/types}">
+    <div class="required field">
+        <div class="ui left labeled input">
+            <label class="ui teal basic label">分类名称</label>
+            <!-- 输入框name应和封装的对象属性名一致 -->
+            <input type="text" name="name" placeholder="分类名称" th:value="*{name}">
+        </div>
+    </div>
+
+    <!-- validation error message -->
+    <div class="ui error message"></div>
+    <!--/*/
+	<div class="ui negative message" th:if="${#fields.hasErrors('name')}">
+	<i class="close icon"></i>
+	<div class="header">验证失败：</div>
+	<p th:errors="*{name}">提交信息不符合规则</p>
+	</div>
+	/*/-->
+    ......
+```
+
+>想要thymeleaf模板正确渲染错误消息需要为form表单添加如下属性
+>
+>th:object="${type}"
+>th:value="*{name}"
+
+后端修改
+
+```java
+// first
+@Entity
+@Table(name = "t_type")
+public class Type {
+    @Id
+    @GeneratedValue
+    private Long id;
+    @NotBlank(message = "分类名称不能为空")
+    private String name;
+    ......
+        
+// second
+/**
+ * 跳到新增页
+ * @return
+ */
+@GetMapping("/types/input")
+public String input(Model model) {
+    model.addAttribute("type", new Type());
+    return "admin/types-input";
+}
+    
+// third
+/**
+ * 新增操作
+ * @return
+ */
+@PostMapping("/types")
+public String save(@Valid Type type, BindingResult result, RedirectAttributes attributes) {
+    if (result.hasErrors()) {
+        return "admin/types-input";
+    }
+    ......
+```
+
+> 新增操作需要做如下修改
+>
+> @Valid
+> BindingResult result
+> 判断是否发生错误
+
+> 跳到新增页前需要准备好type
+>
+> model.addAttribute("type", new Type());
+
+> 实体类需要标注 @NotBlank
+>
+> @NotBlank @NotEmpty 被移除
+> Hibernate 6.x 中， 「org.hibernate.validator」包下的@NotBlank、@NotEmpty被移除了，若是想使用验证注解，可以使用 「javax.validation.constraints」 包下的@NotBlank、@NotEmpty。「org.hibernate.validator」 定义了校验实体类属性的一套规范，「javax.validation.constraints」 实现了这种规范。
+>
+> 即使使用的是javax.validation.constraints.NotBlank也要导入hibernate validator
+
+另外BindingResult可以手动的加异常信息，这样就可以在发生非校验错误时返回我们自己定义的异常信息
+
+```java
+result.rejectValue("name", "nameError", type.getName() + " 分类已存在");
+```
+
+我多挖一锹挖出来一个坑，如果少一个参数会发生如下异常
+
+> result.rejectValue("name", " 分类已存在");
+>
+> Caused by: org.springframework.context.NoSuchMessageException: No message found under code 'aaa 分类已存在.type.name' for locale 'zh_CN'.
+
+
+
+更新分类与新增分类复用同一个页面表单，需要对form的请求地址做处理，同时id使用隐藏域
+
+```html
+<form action="#" method="post" class="ui form" th:object="${type}" 
+      th:action="*{id}==null ? @{/admin/types} : @{/admin/types/{id}(id=${type.id})}">
+    <input type="hidden" name="id" th:value="*{id}">
+```
+
+URL 对比
+
+| 操作     | 该工程请求                        | 以前的写法                                                   |
+| -------- | --------------------------------- | ------------------------------------------------------------ |
+| 获取所有 | @GetMapping("/types")             | @RequestMapping(value = "/emps")                             |
+| 查询一个 | @GetMapping("/types/{id}/input")  | @RequestMapping(value = "/emp/{id}", method = RequestMethod.GET) |
+| 更新     | @PostMapping("/types/{id}")       | @RequestMapping(value = "/emp/{id}", method = RequestMethod.PUT) |
+| 删除     | @GetMapping("/types/{id}/delete") | @RequestMapping(value = "/emp/{id}", method = RequestMethod.DELETE) |
+| 添加     | @PostMapping("/types")            | @RequestMapping(value = "/emp", method = RequestMethod.POST) |
+
+
+
+标签和分类是一样的，按照分类写标签就行
 
 
 

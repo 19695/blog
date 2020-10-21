@@ -47,8 +47,8 @@
     <div class="ui attached pointing menu">
         <div class="ui container">
             <div class="right menu">
-                <a href="#" class="active teal item">新增</a>
-                <a href="#" class="item">列表</a>
+                <a href="#" th:href="@{/admin/types/input}" class="active teal item">新增</a>
+                <a href="#" th:href="@{/admin/types}" class="item">列表</a>
             </div>
         </div>
     </div>
@@ -58,24 +58,41 @@
     <div class="m-container m-padded-tb-big" style="min-height: 60%">
         <!-- container 提供不同设备适配能力 -->
         <div class="ui container">
-            <form action="#" method="post" class="ui form" th:action="@{/admin/types}">
-                <!-- 首图引用 -->
-                <div class="field">
+            <!--
+                配合这种处理方式
+                 model.addAttribute("message", "分类已存在");
+            -->
+            <!--/*/
+            <div class="ui error message" th:unless="${#strings.isEmpty(message)}">
+                <i class="close icon"></i>
+                <div class="header">提示：</div>
+                <p th:text="${message}"></p>
+            </div>
+            /*/-->
+            <form action="#" method="post" class="ui form" th:object="${type}" th:action="*{id}==null ? @{/admin/types} : @{/admin/types/{id}(id=${type.id})}">
+                <input type="hidden" name="id" th:value="*{id}">
+                <div class="required field">
                     <div class="ui left labeled input">
                         <label class="ui teal basic label">分类名称</label>
                         <!-- 输入框name应和封装的对象属性名一致 -->
-                        <input type="text" name="name" placeholder="分类名称">
+                        <input type="text" name="name" placeholder="分类名称" th:value="*{name}">
                     </div>
                 </div>
 
                 <!-- validation error message -->
                 <div class="ui error message"></div>
-
+                <!--/*/
+                <div class="ui negative message" th:if="${#fields.hasErrors('name')}">
+                    <i class="close icon"></i>
+                    <div class="header">验证失败：</div>
+                    <p th:errors="*{name}">提交信息不符合规则</p>
+                </div>
+                /*/-->
                 <!-- buttons -->
                 <div class="ui right aligned container">
                     <!-- type默认是提交 -->
                     <button type="button" class="ui secondary basic button" onclick="window.history.go(-1)">返回</button><!--  style="border-style: solid !important" -->
-                    <button class="ui teal submit button">添加</button>
+                    <button class="ui teal submit button" th:text="*{id}==null ? '添加' : '更新'">添加</button>
                 </div>
             </form>
         </div>
@@ -86,7 +103,7 @@
     <br/>
 
     <!--底部-->
-    <footer class="ui inverted vertical segment m-padded-tb-massive">
+    <footer th:replace="admin/_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
         <!-- 样式之间顺序需要注意center aligned反过来不行 -->
         <div class="ui center aligned container">
             <div class="ui inverted divided stackable grid">
@@ -139,15 +156,19 @@
         /* 表单验证 */
         $('.ui.form').form({
             fields: {
-                type_name: {
-                    identifier: 'type_name',
+                name: {
+                    identifier: 'name',
                     rules: [{
                         type: 'empty',
                         prompt: '请输入分类名称'
                     }]
                 }
-            },
-
+            }
+        });
+        /* 关闭提示消息 */
+        /* 注意选择器中间的空格 */
+        $('.message .close').on('click', function(){
+           $(this).closest('.message').transition('fade');
         });
     </script>
 </body>

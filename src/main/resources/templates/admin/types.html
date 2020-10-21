@@ -45,8 +45,8 @@
     <div class="ui attached pointing menu">
         <div class="ui container">
             <div class="right menu">
-                <a href="#" class="item">新增</a>
-                <a href="#" class="active teal item">列表</a>
+                <a href="#" th:href="@{/admin/types/input}" class="item">新增</a>
+                <a href="#" th:href="@{/admin/types}" class="active teal item">列表</a>
             </div>
         </div>
     </div>
@@ -55,7 +55,11 @@
     <div class="m-container m-padded-tb-big" style="min-height: 60%">
         <!-- container 提供不同设备适配能力 -->
         <div class="ui container">
-
+            <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+                <i class="close icon"></i>
+                <div class="header">提示：</div>
+                <p th:text="${message}"></p>
+            </div>
             <!-- blog -->
             <table class="ui table">
                 <thead>
@@ -153,6 +157,11 @@
         });
         $('.ui.dropdown').dropdown({
             on : 'hover'
+        });
+        /* 关闭提示消息 */
+        /* 注意选择器中间的空格 */
+        $('.message .close').on('click', function(){
+            $(this).closest('.message').transition('fade');
         });
     </script>
 </body>

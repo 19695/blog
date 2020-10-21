@@ -58,6 +58,6 @@ public class TypeServiceImpl implements TypeService {
     @Transactional
     @Override
     public Type getByName(String name) {
-        return null;
+        return typeRepository.getByName(name);
     }
 }
