@@ -104,6 +104,19 @@ fragment应用于script引用部分
 
 
 
+```html
+<!-- 下面这种方式html原型可以正常显示div ，thymeleaf 渲染后不显示div -->
+<!--/*-->
+<div class="item">xxxx</div>
+<!--*/-->
+```
+
+
+
+
+
+
+
 实体关系
 
 Blog n--------1 Type
@@ -370,7 +383,57 @@ Ctrl+Alt+O	自动import和去除没用的import
 
 
 
-thymeleaf + ajax ：https://www.cnblogs.com/zhangruifeng/p/12347419.html
+[使用Thymeleaf时，ajax的url如何设置？](https://www.cnblogs.com/zhangruifeng/p/12347419.html)
+
+
+
+jpa提供复杂查询接口： `JpaSpecificationExecutor<T>` 
+
+```java
+@Transactional
+@Override
+public Page<Blog> getList(Pageable pageable, Blog blog) {
+    return blogRepository.findAll(new Specification<Blog>() {
+        @Override
+        public Predicate toPredicate(Root<Blog> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+            List<Predicate> predicates = new ArrayList<>();
+            // 标题
+            if (!"".equals(blog.getTitle()) || blog.getTitle() != null) {
+                predicates.add(criteriaBuilder.like(root.<String>get("title"), "%" + blog.getTitle() + "%"));
+            }
+            // 分类
+            if (blog.getType().getId() != null) {
+                predicates.add(criteriaBuilder.equal(root.<Type>get("type").get("id"), blog.getType().getId()));
+            }
+            // 推荐
+            if (blog.isRecommend()) {
+                predicates.add(criteriaBuilder.equal(root.<Boolean>get("recommed"), blog.isRecommend()));
+            }
+            criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
+            return null;
+        }
+    }, pageable);
+}
+```
+
+
+
+thymeleaf 自定义属性
+
+```html
+<a class="item" onclick="page(this)" th:attr="data-page=${page.number} - 1)" th:unless="${page.first}">上一页</a>
+
+取值
+$(obj).data("page")
+```
+
+
+
+semantic-ui支持下拉列表通过api取值，适用于下拉列表中数据多的情况，具体参看dropdown
+
+这个项目没有那么多下拉选项，跳转页面的时候直接带过来最好
+
+
 
 
 

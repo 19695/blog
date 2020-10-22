@@ -26,7 +26,7 @@ public class Blog {
     private boolean shareStatement; // 分享开关
     private boolean commentabled; // 评论开关
     private boolean published; // 发布状态
-    private boolean recommed; // 评论开关
+    private boolean recommend; // 评论开关
     @Temporal(TemporalType.TIMESTAMP)
     private Date createTime; // 创建时间
     @Temporal(TemporalType.TIMESTAMP)
@@ -87,8 +87,12 @@ public class Blog {
         this.published = published;
     }
 
-    public void setRecommed(boolean recommed) {
-        this.recommed = recommed;
+    public boolean isRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(boolean recommend) {
+        this.recommend = recommend;
     }
 
     public void setCreateTime(Date createTime) {
@@ -137,10 +141,6 @@ public class Blog {
 
     public boolean isPublished() {
         return published;
-    }
-
-    public boolean isRecommed() {
-        return recommed;
     }
 
     public Date getCreateTime() {
@@ -196,7 +196,7 @@ public class Blog {
                 ", shareStatement=" + shareStatement +
                 ", commentabled=" + commentabled +
                 ", published=" + published +
-                ", recommed=" + recommed +
+                ", recommend=" + recommend +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';

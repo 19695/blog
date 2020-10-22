@@ -56,143 +56,85 @@
     <div class="m-container m-padded-tb-big">
         <!-- container 提供不同设备适配能力 -->
         <div class="ui container">
-            <!-- head form -->
-            <form action="#" method="post" class="ui segment form">
+            <!-- head form 改成了div 不需要做表单提交，只走ajax-->
+            <div class="ui secondary segment form">
+                <input type="hidden" name="page">                                                 <!-- page -->
                 <div class="inline fields">
                     <div class="field">
                         <!-- 禁用历史记录提示 autocomplete="off" -->
-                        <input type="text" name="title" placeholder="标题" autocomplete="off">
+                        <input type="text" name="title" placeholder="标题" autocomplete="off">    <!-- title -->
                     </div>
                     <div class="field">
                         <div class="ui selection dropdown">
-                            <input type="hidden" name="type">
+                            <input type="hidden" name="typeId">                                  <!-- typeId -->
                             <i class="dropdown icon"></i>
                             <div class="default text">分类</div>
                             <div class="menu">
-                                <div class="item" data-value="1">1111</div>
-                                <div class="item" data-value="2">1111</div>
-                                <div class="item" data-value="3">1111</div>
-                                <div class="item" data-value="4">1111</div>
+                                <div class="item" th:each="type : ${types}" data-value="" th:data-value="${type.id}" th:text="${type.name}">1111</div>
+                                <!-- 下面这种方式html原型可以正常显示div ，thymeleaf 渲染后不显示div -->
+                                <!--/*-->
+                                <div class="item">xxxx</div>
+                                <!--*/-->
+
                             </div>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui checkbox">
-                            <input type="checkbox" id="recommend" name="recommend">
+                            <input type="checkbox" id="recommend" name="recommend">             <!-- recommend -->
                             <!-- for绑定checkbox的id，实现点击文字选中功能 -->
                             <label for="recommend">推荐</label>
 <!--                            <label>推荐</label>-->
                         </div>
                     </div>
                     <div class="field">
-                        <button class="ui mini teal basic button"><i class="search icon"></i>搜索</button>
+                        <button type="button" id="search-btn" class="ui mini teal basic button"><i class="search icon"></i>搜索</button>
                     </div>
                 </div>
-            </form>
+            </div>
 
             <!-- blog -->
-            <table class="ui table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>标题</th>
-                        <th>类型</th>
-                        <th>推荐</th>
-                        <th>更新时间</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>这个文章一定要看</td>
-                        <td>垃圾文</td>
-                        <td>是</td>
-                        <td>2019-11-11 09:23</td>
-                        <td>
-                            <a href="#" class="ui mini teal basic button"><i class="edit icon"></i>编辑</a>
-                            <a href="#" class="ui mini red basic button"><i class="trash icon"></i>删除</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>这个文章一定要看</td>
-                        <td>垃圾文</td>
-                        <td>是</td>
-                        <td>2019-11-11 09:23</td>
-                        <td>
-                            <a href="#" class="ui mini teal basic button"><i class="edit icon"></i>编辑</a>
-                            <a href="#" class="ui mini red basic button"><i class="trash icon"></i>删除</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>这个文章一定要看</td>
-                        <td>垃圾文</td>
-                        <td>是</td>
-                        <td>2019-11-11 09:23</td>
-                        <td>
-                            <a href="#" class="ui mini teal basic button"><i class="edit icon"></i>编辑</a>
-                            <a href="#" class="ui mini red basic button"><i class="trash icon"></i>删除</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>这个文章一定要看</td>
-                        <td>垃圾文</td>
-                        <td>是</td>
-                        <td>2019-11-11 09:23</td>
-                        <td>
-                            <a href="#" class="ui mini teal basic button"><i class="edit icon"></i>编辑</a>
-                            <a href="#" class="ui mini red basic button"><i class="trash icon"></i>删除</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>这个文章一定要看</td>
-                        <td>垃圾文</td>
-                        <td>是</td>
-                        <td>2019-11-11 09:23</td>
-                        <td>
-                            <a href="#" class="ui mini teal basic button"><i class="edit icon"></i>编辑</a>
-                            <a href="#" class="ui mini red basic button"><i class="trash icon"></i>删除</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>这个文章一定要看</td>
-                        <td>垃圾文</td>
-                        <td>是</td>
-                        <td>2019-11-11 09:23</td>
-                        <td>
-                            <a href="#" class="ui mini teal basic button"><i class="edit icon"></i>编辑</a>
-                            <a href="#" class="ui mini red basic button"><i class="trash icon"></i>删除</a>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="6">
-                            <div class="ui mini pagination menu">
-                                <a href="#" class="item">上一页</a>
-                                <a href="#" class="item">下一页</a>
-                                <!-- 豪华分页套装 -->
-                               <!-- <a class="icon item">
-                                    <i class="left chevron icon"></i>
-                                </a>
-                                <a class="active item">1</a>
-                                <a class="item">2</a>
-                                <a class="item">3</a>
-                                <a class="item">4</a>
-                                <a class="icon item">
-                                    <i class="right chevron icon"></i>
-                                </a>-->
-                            </div>
-                            <a href="#" class="ui mini right floated teal basic button">新增</a>
-                        </th>
-                    </tr>
-                </tfoot>
-            </table>
+            <!-- 通过#table-container定位，只重新加载这一部分 -->
+            <div id="table-container">
+
+                <table th:fragment="blogList" class="ui compact teal table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>标题</th>
+                            <th>类型</th>
+                            <th>推荐</th>
+                            <th>更新时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="blog, iterStat : ${page.content}">
+                            <td th:text="iterStat.count">1</td>
+                            <td th:text="${blog.title}">这个文要看</td>
+                            <td th:text="${blog.type.name}">垃圾文</td>
+                            <td th:text="${blog.recommend} ? '是' : '否'">是</td>
+                            <td th:text="${blog.updateTime}">2019-11-11 09:23</td>
+                            <td>
+                                <a href="#" th:href="@{/admin/blogs/{id}/input(id=${blog.id})}" class="ui mini teal basic button"><i class="edit icon"></i>编辑</a>
+                                <a href="#" th:href="@{/admin/blogs/{id}/delete(id=${blog.id})}" class="ui mini red basic button"><i class="trash icon"></i>删除</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="6">
+                                <div class="ui mini pagination menu" th:if="${page.totalPages} > 1">
+                                    <a class="item" onclick="page(this)" th:attr="data-page=${page.number} - 1)" th:unless="${page.first}">上一页</a>
+                                    <a class="item" onclick="page(this)" th:attr="data-page=${page.number} + 1)" th:unless="${page.last}">下一页</a>
+                                </div>
+                                <a href="#" class="ui mini right floated teal basic button">新增</a>
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
         </div>
     </div>
 
@@ -249,6 +191,26 @@
         $('.ui.dropdown').dropdown({
             on : 'hover'
         });
+
+        /* ajax */
+        function loadData(){
+            $('#table-container').load(/*[[@{/admin/blogs/search}]]*/"/admin/blogs/search", {
+                title : $("[name='title']").val(),
+                typeId : $("[name='typeId']").val(),
+                recommend : $("[name='recommend']").prop('checked'),
+                page : $("[name='page']").val()
+            });
+        }
+
+        $("#search-btn").click(function() {
+            loadData();
+        });
+
+        // 把上一页、下一页通过js传给form属性，通过ajax提交表单信息
+        function page(obj){
+            $("[name=page]").val($(obj).data("page"));
+            loadData();
+        }
     </script>
 </body>
 </html>
