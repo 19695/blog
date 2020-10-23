@@ -109,8 +109,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                    <p th:text="${page}"></p>
                         <tr th:each="blog, iterStat : ${page.content}">
-                            <td th:text="iterStat.count">1</td>
+                            <td th:text="${iterStat.count}">1</td>
                             <td th:text="${blog.title}">这个文要看</td>
                             <td th:text="${blog.type.name}">垃圾文</td>
                             <td th:text="${blog.recommend} ? '是' : '否'">是</td>
@@ -134,6 +135,11 @@
                     </tfoot>
                 </table>
 
+                <div class="ui success message" th:unless="${#strings.isEmpty(msg)}">
+                    <i class="close icon"></i>
+                    <div class="header">提示：</div>
+                    <p th:text="${msg}"></p>
+                </div>
             </div>
         </div>
     </div>
@@ -204,6 +210,11 @@
 
         $("#search-btn").click(function() {
             loadData();
+        });
+
+        // 关闭提示消息
+        $('.message .close').on('click', function(){
+            $(this).closest('.message').transition('fade');
         });
 
         // 把上一页、下一页通过js传给form属性，通过ajax提交表单信息

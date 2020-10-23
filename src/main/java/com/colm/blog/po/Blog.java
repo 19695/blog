@@ -18,10 +18,12 @@ public class Blog {
     @GeneratedValue
     private Long id;
     private String title; // 标题
-    private String content; // 内容
+    @Basic(fetch = FetchType.LAZY) // 太大了，使用延迟加载
+    @Lob
+    private String content; // 内容，string默认255，应该是长文本类型
     private String firstPicture; // 首图
     private String flag; // 标记
-    private String views; // 浏览数量
+    private Integer views; // 浏览数量
     private boolean appreciation; // 赞赏开关
     private boolean shareStatement; // 分享开关
     private boolean commentabled; // 评论开关
@@ -31,6 +33,10 @@ public class Blog {
     private Date createTime; // 创建时间
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateTime; // 更新时间
+
+    // 不作为表结构
+    @Transient
+    private String tagIds;
 
     @ManyToOne
     private Type type;
@@ -65,10 +71,6 @@ public class Blog {
 
     public void setFlag(String flag) {
         this.flag = flag;
-    }
-
-    public void setViews(String views) {
-        this.views = views;
     }
 
     public void setAppreciation(boolean appreciation) {
@@ -123,8 +125,12 @@ public class Blog {
         return flag;
     }
 
-    public String getViews() {
+    public Integer getViews() {
         return views;
+    }
+
+    public void setViews(Integer views) {
+        this.views = views;
     }
 
     public boolean isAppreciation() {
@@ -181,6 +187,14 @@ public class Blog {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public String getTagIds() {
+        return tagIds;
+    }
+
+    public void setTagIds(String tagIds) {
+        this.tagIds = tagIds;
     }
 
     @Override

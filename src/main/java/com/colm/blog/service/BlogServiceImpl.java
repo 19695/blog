@@ -18,6 +18,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,7 +43,8 @@ public class BlogServiceImpl implements BlogService {
     @Transactional
     @Override
     public Page<Blog> getList(Pageable pageable, Blog blog) {
-        return blogRepository.findAll(new Specification<Blog>() {
+        return blogRepository.findAll(pageable);
+        /*return blogRepository.findAll(new Specification<Blog>() {
             @Override
             public Predicate toPredicate(Root<Blog> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new ArrayList<>();
@@ -57,12 +59,12 @@ public class BlogServiceImpl implements BlogService {
                 }
                 // 推荐
                 if (blog.isRecommend()) {
-                    predicates.add(criteriaBuilder.equal(root.<Boolean>get("recommed"), blog.isRecommend()));
+                    predicates.add(criteriaBuilder.equal(root.<Boolean>get("recommend"), blog.isRecommend()));
                 }
                 criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
                 return null;
             }
-        }, pageable);
+        }, pageable);*/
     }
 
     /*
@@ -74,7 +76,7 @@ public class BlogServiceImpl implements BlogService {
             @Override
             public Predicate toPredicate(Root<Blog> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new ArrayList<>();
-                if (!"".equals(blogQuery.getTitle()) || blogQuery.getTitle() != null) {
+                if (!"".equals(blogQuery.getTitle()) && blogQuery.getTitle() != null) {
                     predicates.add(criteriaBuilder.like(root.<String>get("title"), "%" + blogQuery.getTitle() + "%"));
                 }
                 if (blogQuery.getTypeId() != null) {
@@ -83,8 +85,9 @@ public class BlogServiceImpl implements BlogService {
                 if (blogQuery.isRecommend()) {
                     predicates.add(criteriaBuilder.equal(root.<Boolean>get("recommend"), blogQuery.isRecommend()));
                 }
-                criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
-                return null;
+//                criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()])); // 这样没查出来
+                // 参考 ：https://zhuanlan.zhihu.com/p/122539515
+                return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         }, pageable);
     }
@@ -104,6 +107,12 @@ public class BlogServiceImpl implements BlogService {
     @Transactional
     @Override
     public Blog saveBlog(Blog blog) {
+        if (blog.getId() == null) {
+            blog.setCreateTime(new Date());
+            blog.setViews(0);
+        } else {
+            blog.setUpdateTime(new Date());
+        }
         return blogRepository.save(blog);
     }
 
