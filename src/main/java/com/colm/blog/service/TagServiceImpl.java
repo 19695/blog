@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by Colm on 2020/10/21
  */
@@ -33,8 +35,14 @@ public class TagServiceImpl implements TagService {
 
     @Transactional
     @Override
-    public Page<Tag> getTags(Pageable pageable) {
+    public Page<Tag> listTag(Pageable pageable) {
         return tagRepository.findAll(pageable);
+    }
+
+    @Transactional
+    @Override
+    public List<Tag> listTag() {
+        return tagRepository.findAll();
     }
 
     @Transactional

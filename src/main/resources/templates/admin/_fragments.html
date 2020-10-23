@@ -10,6 +10,18 @@
     <link rel="stylesheet" href="../../static/css/complement.css" th:href="@{/css/complement.css}">
     <title th:replace="${title}">博客管理</title>
 </head>
+<head th:fragment="input-head(title)">
+    <meta charset="UTF-8">
+    <!--  移动端适配  -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--  CDN导入样式  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.4/dist/semantic.min.css">
+    <!--  导入自定义css  -->
+    <link rel="stylesheet" href="../../static/css/complement.css" th:href="@{/css/complement.css}">
+    <!-- css for markdown editor -->
+    <link rel="stylesheet" href="../../static/lib/editormd/css/editormd.min.css" th:href="@{/lib/editormd/css/editormd.min.css}">
+    <title>博客发布</title>
+</head>
 <body>
 <nav th:fragment="menu(page)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
     <div class="ui container">

@@ -4,6 +4,8 @@ import com.colm.blog.po.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * Created by Colm on 2020/10/21
  */
@@ -13,7 +15,9 @@ public interface TagService {
 
     Tag getTag(Long id);
 
-    Page<Tag> getTags(Pageable pageable);
+    Page<Tag> listTag(Pageable pageable);
+
+    List<Tag> listTag();
 
     Tag updateTag(Long id, Tag tag);
 
