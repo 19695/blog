@@ -4,11 +4,14 @@ import com.colm.blog.dao.BlogRepository;
 import com.colm.blog.exception.NotFoundException;
 import com.colm.blog.po.Blog;
 import com.colm.blog.po.Type;
+import com.colm.blog.util.MyBeanUtils;
 import com.colm.blog.vo.BlogQuery;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,12 +98,14 @@ public class BlogServiceImpl implements BlogService {
     @Transactional
     @Override
     public Blog updateBlog(Long id, Blog blog) {
-        Blog repositoryOne = blogRepository.getOne(id);
+        Blog repositoryOne = blogRepository.getById(id);
         if (repositoryOne == null) {
             throw new NotFoundException("该博客不存在");
         }
         // blog --> repositoryOne
-        BeanUtils.copyProperties(blog, repositoryOne);
+//        BeanUtils.copyProperties(blog, repositoryOne); // 会把 null 也copy
+        BeanUtils.copyProperties(blog, repositoryOne, MyBeanUtils.getNullPropertyNames(blog));
+        repositoryOne.setUpdateTime(new Date());
         return blogRepository.save(repositoryOne);
     }
 
@@ -121,5 +126,23 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public void deleteBlog(Long id) {
         blogRepository.deleteById(id);
+    }
+
+    /**
+     * 查出来的是要显示在首页的，这个时候有未发布的我不想显示
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Blog> getList(Pageable pageable) {
+        blogRepository.getByPublished(pageable, true);
+        return blogRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Blog> listRecommendTop(Integer size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "updateTime");
+        PageRequest request = PageRequest.of(0, size, sort);
+        return blogRepository.listRecommendTop(request);
     }
 }

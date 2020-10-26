@@ -32,4 +32,6 @@ public interface TagService {
 
     String createOrNot(String ids);
 
+    List<Tag> listTop(Integer size);
+
 }

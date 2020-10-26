@@ -47,6 +47,16 @@ public class Blog {
     @ManyToOne
     private User user;
 
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @OneToMany(mappedBy = "blog")
     private List<Comment> comments;
 
@@ -227,7 +237,7 @@ public class Blog {
                 ", content='" + content + '\'' +
                 ", firstPicture='" + firstPicture + '\'' +
                 ", flag='" + flag + '\'' +
-                ", views='" + views + '\'' +
+                ", views=" + views +
                 ", appreciation=" + appreciation +
                 ", shareStatement=" + shareStatement +
                 ", commentabled=" + commentabled +
@@ -235,6 +245,12 @@ public class Blog {
                 ", recommend=" + recommend +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
+                ", tagIds='" + tagIds + '\'' +
+                ", type=" + type +
+                ", tags=" + tags +
+                ", user=" + user +
+                ", description='" + description + '\'' +
+                ", comments=" + comments +
                 '}';
     }
 

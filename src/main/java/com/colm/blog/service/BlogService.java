@@ -25,4 +25,8 @@ public interface BlogService {
     Blog saveBlog(Blog blog);
 
     void deleteBlog(Long id);
+
+    Page<Blog> getList(Pageable pageable);
+
+    List<Blog> listRecommendTop(Integer size);
 }

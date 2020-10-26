@@ -116,7 +116,12 @@ public class BlogController {
         blog.setTagIds(ids);
         blog.setTags(tagService.listTag(blog.getTagIds()));  // ex: 1,2,3
         blog.setType(typeService.getType(blog.getType().getId()));  // name="type.id"
-        Blog blog1 = blogService.saveBlog(blog);
+        Blog blog1 = null;
+        if (blog.getId() == null) {
+            blog1 = blogService.saveBlog(blog);
+        } else {
+            blog1 = blogService.updateBlog(blog.getId(), blog);
+        }
         if (blog1 != null) {
             attributes.addFlashAttribute("msg", "操作成功");
         } else {
@@ -125,6 +130,12 @@ public class BlogController {
         return REDIRECT_INPUT;
     }
 
+    /**
+     * 删除一个博客
+     * @param id
+     * @param attributes
+     * @return
+     */
     @GetMapping("/blogs/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes attributes) {
         blogService.deleteBlog(id);
