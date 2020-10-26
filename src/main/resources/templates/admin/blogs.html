@@ -65,18 +65,21 @@
                         <input type="text" name="title" placeholder="标题" autocomplete="off">    <!-- title -->
                     </div>
                     <div class="field">
-                        <div class="ui selection dropdown">
-                            <input type="hidden" name="typeId">                                  <!-- typeId -->
-                            <i class="dropdown icon"></i>
-                            <div class="default text">分类</div>
-                            <div class="menu">
-                                <div class="item" th:each="type : ${types}" data-value="" th:data-value="${type.id}" th:text="${type.name}">1111</div>
-                                <!-- 下面这种方式html原型可以正常显示div ，thymeleaf 渲染后不显示div -->
-                                <!--/*-->
-                                <div class="item">xxxx</div>
-                                <!--*/-->
+                        <div class="ui labeled action input">
+                            <div class="ui selection dropdown type-dd">
+                                <input type="hidden" name="typeId">                                  <!-- typeId -->
+                                <i class="dropdown icon"></i>
+                                <div class="default text">分类</div>
+                                <div class="menu">
+                                    <div class="item" th:each="type : ${types}" data-value="" th:data-value="${type.id}" th:text="${type.name}">1111</div>
+                                    <!-- 下面这种方式html原型可以正常显示div ，thymeleaf 渲染后不显示div -->
+                                    <!--/*-->
+                                    <div class="item">xxxx</div>
+                                    <!--*/-->
 
+                                </div>
                             </div>
+                            <div id="clear-btn" class="ui compact button">Clear</div>
                         </div>
                     </div>
                     <div class="field">
@@ -84,13 +87,20 @@
                             <input type="checkbox" id="recommend" name="recommend">             <!-- recommend -->
                             <!-- for绑定checkbox的id，实现点击文字选中功能 -->
                             <label for="recommend">推荐</label>
-<!--                            <label>推荐</label>-->
                         </div>
                     </div>
                     <div class="field">
                         <button type="button" id="search-btn" class="ui mini teal basic button"><i class="search icon"></i>搜索</button>
+                        <!-- todo 待增加重置功能，后期优化 -->
+<!--                        <button type="reset" id="reset-btn" class="ui mini teal basic button"><i class="reset icon"></i>重置</button>-->
                     </div>
                 </div>
+            </div>
+
+            <div class="ui success message" th:unless="${#strings.isEmpty(msg)}">
+                <i class="close icon"></i>
+                <div class="header">提示：</div>
+                <p th:text="${msg}"></p>
             </div>
 
             <!-- blog -->
@@ -104,17 +114,18 @@
                             <th>标题</th>
                             <th>类型</th>
                             <th>推荐</th>
+                            <th>状态</th>
                             <th>更新时间</th>
                             <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
-                    <p th:text="${page}"></p>
                         <tr th:each="blog, iterStat : ${page.content}">
                             <td th:text="${iterStat.count}">1</td>
                             <td th:text="${blog.title}">这个文要看</td>
                             <td th:text="${blog.type.name}">垃圾文</td>
                             <td th:text="${blog.recommend} ? '是' : '否'">是</td>
+                            <td th:text="${blog.published} ? '发布' : '草稿'">发布</td>
                             <td th:text="${blog.updateTime}">2019-11-11 09:23</td>
                             <td>
                                 <a href="#" th:href="@{/admin/blogs/{id}/input(id=${blog.id})}" class="ui mini teal basic button"><i class="edit icon"></i>编辑</a>
@@ -124,10 +135,10 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th colspan="6">
+                            <th colspan="7">
                                 <div class="ui mini pagination menu" th:if="${page.totalPages} > 1">
-                                    <a class="item" onclick="page(this)" th:attr="data-page=${page.number} - 1)" th:unless="${page.first}">上一页</a>
-                                    <a class="item" onclick="page(this)" th:attr="data-page=${page.number} + 1)" th:unless="${page.last}">下一页</a>
+                                    <a class="item" onclick="page(this)" th:attr="data-page=${page.number} - 1" th:unless="${page.first}">上一页</a>
+                                    <a class="item" onclick="page(this)" th:attr="data-page=${page.number} + 1" th:unless="${page.last}">下一页</a>
                                 </div>
                                 <a href="#" th:href="@{/admin/blogs/input}" class="ui mini right floated teal basic button">新增</a>
                             </th>
@@ -135,11 +146,6 @@
                     </tfoot>
                 </table>
 
-                <div class="ui success message" th:unless="${#strings.isEmpty(msg)}">
-                    <i class="close icon"></i>
-                    <div class="header">提示：</div>
-                    <p th:text="${msg}"></p>
-                </div>
             </div>
         </div>
     </div>
@@ -209,7 +215,12 @@
         }
 
         $("#search-btn").click(function() {
+            $("[name=page]").val(0);
             loadData();
+        });
+
+        $('#clear-btn').on('click', function() {
+            $('.type-dd.ui.dropdown').dropdown('clear');
         });
 
         // 关闭提示消息

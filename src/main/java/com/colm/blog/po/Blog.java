@@ -20,7 +20,7 @@ public class Blog {
     private String title; // 标题
     @Basic(fetch = FetchType.LAZY) // 太大了，使用延迟加载
     @Lob
-    private String content; // 内容，string默认255，应该是长文本类型
+    private String content; // 内容，string默认255，应该是长文本类型(longtext)。可以加上注释
     private String firstPicture; // 首图
     private String flag; // 标记
     private Integer views; // 浏览数量
@@ -28,7 +28,7 @@ public class Blog {
     private boolean shareStatement; // 分享开关
     private boolean commentabled; // 评论开关
     private boolean published; // 发布状态
-    private boolean recommend; // 评论开关
+    private boolean recommend; // 是否推荐
     @Temporal(TemporalType.TIMESTAMP)
     private Date createTime; // 创建时间
     @Temporal(TemporalType.TIMESTAMP)
@@ -197,6 +197,28 @@ public class Blog {
         this.tagIds = tagIds;
     }
 
+    public void initTagIds() {
+        this.tagIds = tagsToIds(this.getTags());
+    }
+
+    public String tagsToIds(List<Tag> tags) {
+        if (!tags.isEmpty()){
+            StringBuffer ids = new StringBuffer();
+            boolean flag = false;
+            for (Tag tag : tags) {
+                if (flag) {
+                    ids.append(",");
+                } else {
+                    flag = true;
+                }
+                ids.append(tag.getId());
+            }
+            return ids.toString();
+        } else {
+            return tagIds;
+        }
+    }
+
     @Override
     public String toString() {
         return "Blog{" +
@@ -214,6 +236,28 @@ public class Blog {
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';
+    }
+
+    public static void main(String[] args) {
+        Tag t1 = new Tag();
+        Tag t2 = new Tag();
+        Tag t3 = new Tag();
+        Tag t4 = new Tag();
+        t1.setId(1L);
+        t1.setName("tag1");
+        t2.setId(2L);
+        t2.setName("tag2");
+        t3.setId(3L);
+        t3.setName("tag3");
+        t4.setId(4L);
+        t4.setName("tag4");
+        List<Tag> tags = new ArrayList<>();
+        tags.add(t1);
+        tags.add(t2);
+        tags.add(t3);
+        tags.add(t4);
+        Blog blog = new Blog();
+        System.out.println(blog.tagsToIds(tags));;
     }
 
 }

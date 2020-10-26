@@ -109,6 +109,7 @@ public class BlogServiceImpl implements BlogService {
     public Blog saveBlog(Blog blog) {
         if (blog.getId() == null) {
             blog.setCreateTime(new Date());
+            blog.setUpdateTime(new Date()); // 不然新建的时候，列表页面没有时间显示
             blog.setViews(0);
         } else {
             blog.setUpdateTime(new Date());

@@ -435,6 +435,37 @@ semantic-ui支持下拉列表通过api取值，适用于下拉列表中数据多
 
 
 
+```java
+import javax.persistence.*; // 注意是这个包下的注解
+
+// 标记注解，不作为表结构
+@Transient
+private String tagIds;
+
+
+// 注意这里字段的长度
+@Basic(fetch = FetchType.LAZY) // 太大了，使用延迟加载
+@Lob
+private String content; // 内容，string默认255，应该是长文本类型
+
+
+// 怎么转的不重要，重要的是在controller中调用此方法完成转换，然后在页面的上可获取该属性值 tagIds
+public void initTagIds() {
+    this.tagIds = tagsToIds(this.getTags()); 
+}
+```
+
+
+
+springboot-jpa 的EntityNotFoundException
+
+```java
+@Query("select t from Tag t where t.id = ?1 ")
+Tag getById(Long id);
+```
+
+参考：https://blog.csdn.net/u012462033/article/details/79466679/
+
 
 
 统一异常处理
@@ -446,3 +477,5 @@ AOP日志处理
 实体类生成对应数据库表
 
 管理员登录推出，权限拦截，MD5加密
+
+标签、分类、

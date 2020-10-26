@@ -249,7 +249,7 @@
                     $('.close.icon').click();
                     $('#success-msg').text(data.message);
                     $('#success-div').show();
-                    setTimeout(window.location.reload(), 1000);
+                    setTimeout(window.location.reload(), 1000); // todo 这里可以调用部分刷新，后期优化
                 }
                 console.log(data);
             });

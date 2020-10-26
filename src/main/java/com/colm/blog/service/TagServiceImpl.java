@@ -2,7 +2,10 @@ package com.colm.blog.service;
 
 import com.colm.blog.dao.TagRepository;
 import com.colm.blog.exception.NotFoundException;
+import com.colm.blog.po.Blog;
 import com.colm.blog.po.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.thymeleaf.expression.Strings;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +25,8 @@ import java.util.List;
  */
 @Service
 public class TagServiceImpl implements TagService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TagServiceImpl.class);
 
     @Autowired
     private TagRepository tagRepository;
@@ -34,7 +40,7 @@ public class TagServiceImpl implements TagService {
     @Transactional
     @Override
     public Tag getTag(Long id) {
-        return tagRepository.getOne(id);
+        return tagRepository.getById(id);
     }
 
     @Transactional
@@ -45,7 +51,7 @@ public class TagServiceImpl implements TagService {
 
     @Transactional
     @Override
-    public List<Tag> listTab(String ids) {
+    public List<Tag> listTag(String ids) {
         return tagRepository.findAllById(convertToList(ids));
     }
 
@@ -90,5 +96,33 @@ public class TagServiceImpl implements TagService {
     @Override
     public Tag getByName(String name) {
         return tagRepository.findByName(name);
+    }
+
+    @Override
+    public String createOrNot(String ids) {
+        String[] list = ids.split(",");
+        for(String id : list) {
+            try {
+                if ("".equals(id)){
+                    continue;
+                }
+                Tag tag = getTag(Long.parseLong(id));
+                if (tag == null) {
+                    Tag tag1 = new Tag();
+                    tag1.setName(id);
+                    Tag save = tagRepository.save(tag1);
+                    LOGGER.info("新增博客时获取标签时有新增标签，新增标签：{}", save);
+                    ids = ids.replace(id, save.getId().toString());
+                }
+            } catch (EntityNotFoundException e) {
+                LOGGER.info("新增博客时获取标签时有新增标签，获取标签发生异常：{}", e);
+                Tag tag = new Tag();
+                tag.setName(id);
+                Tag save = tagRepository.save(tag);
+                LOGGER.info("新增博客时获取标签时有新增标签，新增标签：{}", save);
+                ids = ids.replace(id, save.getId().toString());
+            }
+        }
+        return ids;
     }
 }
