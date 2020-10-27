@@ -35,19 +35,21 @@
     <div class="ui container">
         <!-- stackable 可堆叠的，移动端的时候可自适应 -->
         <div class="ui inverted secondary stackable menu">
-            <h2 class="ui teal header item">Blog</h2>
+            <h2 class="ui teal header item" onclick="javascript:window.location.href='/'">Blog</h2>
             <!-- m-item 为选择器定位 -->
-            <a href="#" class="m-item item m-mobile-hide" th:classappend="${page == '首页'} ? 'active'"><i class="small home icon"></i>首页</a>
+            <a href="#" th:href="@{/blogs}" class="m-item item m-mobile-hide" th:classappend="${page == '首页'} ? 'active'"><i class="small home icon"></i>首页</a>
             <a href="#" class="m-item item m-mobile-hide" th:classappend="${page == '分类'} ? 'active'"><i class="small idea icon"></i>分类</a>
             <a href="#" class="m-item item m-mobile-hide" th:classappend="${page == '标签'} ? 'active'"><i class="small tags icon"></i>标签</a>
             <a href="#" class="m-item item m-mobile-hide" th:classappend="${page == '归档'} ? 'active'"><i class="small clone icon"></i>归档</a>
             <a href="#" class="m-item item m-mobile-hide" th:classappend="${page == '关于我'} ? 'active'"><i class="small info icon"></i>关于我</a>
             <div class="right m-item item m-mobile-hide">
                 <!-- 不加 icon 的话，图标显示与搜索框不是一个整体 -->
-                <div class="ui icon inverted transparent input">
-                    <input type="text" placeholder="Search...">
-                    <i class="search icon"></i>
-                </div>
+                <form name="search" action="#" th:action="@{/search}" method="post" target="_blank">
+                    <div class="ui icon inverted transparent input">
+                        <input type="text" name="query" placeholder="Search..." th:value="${query}">
+                        <i onclick="document.forms['search'].submit()" class="search icon"></i>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

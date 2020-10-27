@@ -53,32 +53,32 @@
             <div class="ui top attached segment">
                 <div class="ui horizontal link list">
                     <div class="item">
-                        <img src="https://picsum.photos/id/1/100/100" alt="" class="ui avatar image">
+                        <img src="https://picsum.photos/id/1/100/100" alt="" class="ui avatar image" th:src="@{${blog.user} ? ${blog.user.avatar} : 'https://picsum.photos/id/1/100/100'}">
                         <!-- 加content才能显示在一行 -->
-                        <div class="content"><a href="#" class="header">colm</a></div>
+                        <div class="content"><a href="#" class="header" th:text="${blog.user.nickname}">colm</a></div>
                     </div>
                     <div class="item">
-                        <i class="calendar icon"></i> 2020-12-11
+                        <i class="calendar icon"></i> <span th:text="${blog.updateTime}">2020-12-11</span>
                     </div>
                     <div class="item">
-                        <i class="eye icon"></i> 123
+                        <i class="eye icon"></i> <span th:text="${blog.views}">123</span>
                     </div>
                 </div>
             </div>
             <!-- 图片区域 -->
             <div class="ui attached segment">
-                <img src="https://picsum.photos/id/1/800/450" alt="" class="ui fluid rounded image">
+                <img src="https://picsum.photos/id/1/800/450" th:src="@{${blog.firstPicture} ? ${blog.firstPicture} : 'https://picsum.photos/id/1/800/450'}" alt="" class="ui fluid rounded image">
             </div>
             <!-- 博客正文 -->
             <div class="ui attached padded segment">
                 <div class="ui right aligned basic segment">
-                    <div class="ui orange basic label">原创</div>
+                    <div class="ui orange basic label" th:text="${blog.flag}">原创</div>
                 </div>
                 <!-- 标题 -->
-                <h2 class="ui center aligned header">加油特种兵</h2>
-                <br>
+                <h1 class="ui center aligned header" th:text="${blog.title}">加油特种兵</h1>
+                <br><br>
                 <!-- 正文 --><!-- js-toc-content 从这个div中生成目录 -->
-                <div id="content" class="typo typo-selection m-padded-lr-response-huge m-padded-tb-large js-toc-content">
+                <div id="content" class="typo typo-selection m-padded-lr-response-huge m-padded-tb-large js-toc-content" th:utext="${blog.content}">
                     <h1>中文网页重设与排版：<i class="serif">Typo.css</i></h1><br/>
 
                     <pre><code class="">p { color: red }</code></pre>
@@ -463,11 +463,11 @@ h5,h6{font-size:1em;}
                 </div>
                 <!-- 标签 -->
                 <div class="m-padded-lr-response-huge">
-                    <div class="ui basic teal left pointing label">方法论</div>
+                    <div class="ui basic teal left pointing label" th:each="tag : ${blog.tags}" th:text="${tag.name}">方法论</div>
                 </div>
                 <!-- 赞赏button -->
                 <div class="ui center aligned basic segment">
-                    <button id="payButton" class="ui orange basic circular button">赞赏</button>
+                    <button id="payButton" class="ui orange basic circular button" th:if="${blog.appreciation}">赞赏</button>
                 </div>
                 <!-- popup -->
                 <div class="ui payQR flowing popup transition hidden">
@@ -482,7 +482,7 @@ h5,h6{font-size:1em;}
                             </div>
                             <div class="image">
                                 <img src="../static/images/myblog.png" th:src="@{/images/myblog.png}" alt="" class="ui rounded bordered image" style="width: 120px;">
-                                <div>WeChart</div>
+                                <div>WeChat</div>
                             </div>
                         </div>
                     </div>
@@ -494,8 +494,8 @@ h5,h6{font-size:1em;}
                     <!-- wide 要在 eleven后不然不好使 -->
                     <div class="ui eleven wide column">
                         <ui class="list">
-                            <li>作者：xxx</li>
-                            <li>发表时间：xxxx</li>
+                            <li>作者：<span th:text="${blog.user.nickname}">xxx</span><a href="#" th:href="@{/about}">(联系作者)</a></li>
+                            <li>发表时间：<span th:text="${#dates.format(blog.createTime, 'yyyy-MM-dd HH:mm:ss')}">xxxx</span></li>
                             <li>版权说明：自由转载-非商用-非衍生-保持署名</li>
                             <li>公众号转载：xxxx</li>
                         </ui>
@@ -693,7 +693,7 @@ h5,h6{font-size:1em;}
     <!-- 滚动侦测 -->
     <script src="../static/lib/waypoints/jquery.waypoints.min.js"></script>
 <!--/*/</th:block>/*/-->
-    <script>
+    <script th:inline="javascript">
 
         /* 初始化生成目录 */
         tocbot.init({
@@ -731,8 +731,12 @@ h5,h6{font-size:1em;}
             position : 'left center'
         });
         /* 二维码生成 */
+        // var hostUrl = "127.0.0.1:8080";
+        var hostUrl = "http://192.168.31.30:8080";
+        var url = /*[[@{/blog/{id}(id=${blog.id})}]]*/""; // 模板引擎的路径书写方式
         var qrcode = new QRCode("qrcode", {
-            text: "http://jindo.dev.naver.com/collie",
+            // text: "http://jindo.dev.naver.com/collie",
+            text: hostUrl + url,
             width: 110,
             height: 110,
             colorDark : "#000000",

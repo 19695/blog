@@ -10,6 +10,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Created by Colm on 2020/10/18
@@ -26,8 +29,14 @@ public class IndexController {
     @Autowired
     private TagService tagService;
 
-    @GetMapping("/")
-    public String index(@PageableDefault(size = 10, sort = {"views"}, direction = Sort.Direction.DESC) Pageable pageable, Model model) {
+    /**
+     * 跳转到首页
+     * @param pageable
+     * @param model
+     * @return
+     */
+    @GetMapping({"/", "/blogs"})
+    public String index(@PageableDefault(size = 8, sort = {"views"}, direction = Sort.Direction.DESC) Pageable pageable, Model model) {
         model.addAttribute("page", blogService.getList(pageable));
         model.addAttribute("topTypes", typeService.listTop(6));
         model.addAttribute("topTags", typeService.listTop(10));
@@ -35,12 +44,30 @@ public class IndexController {
         return "index";
     }
 
-    @GetMapping("/blogs")
-    public String blogs(){
-        return "admin/blogs";
+    /**
+     * 根据条件搜索博客，跳转到搜索结果页面
+     * @param pageable
+     * @param query
+     * @param model
+     * @return
+     */
+    @PostMapping("/search")
+    public String search(@PageableDefault(size = 8, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
+                         @RequestParam String query, Model model) {
+        model.addAttribute("page", blogService.getList(pageable, "%" + query + "%"));
+        model.addAttribute("query", query);
+        return "search";
     }
-    @GetMapping("/input")
-    public String input(){
-        return "admin/index";
+
+    /**
+     * 根据id获取博客，跳转到博客详情页
+     * @param id
+     * @param model
+     * @return
+     */
+    @GetMapping("/blog/{id}")
+    public String blog(@PathVariable Long id, Model model) {
+        model.addAttribute("blog", blogService.getAndConvert(id));
+        return "blog";
     }
 }

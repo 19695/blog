@@ -472,14 +472,112 @@ Tag getById(Long id);
 
 
 
-统一异常处理
+MarkDown转HTML：commonmark-java
 
-AOP日志处理
+https://github.com/atlassian/commonmark-java
 
-导入模板页面修改fragment
+```xml
+<dependency>
+    <groupId>com.atlassian.commonmark</groupId>
+    <artifactId>commonmark</artifactId>
+    <version>0.15.2</version>
+</dependency>
+<dependency>
+    <groupId>com.atlassian.commonmark</groupId>
+    <artifactId>commonmark-ext-gfm-tables</artifactId>
+    <version>0.15.2</version>
+</dependency>
+<dependency>
+    <groupId>com.atlassian.commonmark</groupId>
+    <artifactId>commonmark-ext-heading-anchor</artifactId>
+    <version>0.15.2</version>
+</dependency>
+```
 
-实体类生成对应数据库表
+> 基本：commonmark
+>
+> table：commonmark-ext-gfm-tables
+>
+> anchor（锚点）：commonmark-ext-heading-anchor
 
-管理员登录推出，权限拦截，MD5加密
 
-标签、分类、博客管理
+
+th:text="" 这种不会转移html标签，即例如 `<p>` 会被直接输出到界面上
+
+th:utext="" 这种会转移html标签，即例如 `<p>` 会被解释为html元素正常进行网页显示
+
+
+
+自己加一个img转换，后经测试不加也行，记录下来说不定啥时候单独使用
+
+```xml
+<dependency>
+    <groupId>com.atlassian.commonmark</groupId>
+    <artifactId>commonmark-ext-image-attributes</artifactId>
+    <version>0.15.2</version>
+</dependency>
+```
+
+
+
+注意thymeleaf模板中的 thymeleaf语法使用和路径书写方式
+
+```html
+<script th:inline="javascript">
+    /* 二维码生成 */
+    var hostUrl = "127.0.0.1:8080";
+    var url = /*[[@{/blog/{id}(id=${blog.id})}]]*/""; // 模板引擎的路径书写方式
+    var qrcode = new QRCode("qrcode", {
+        // text: "http://jindo.dev.naver.com/collie",
+        text: hostUrl + url,
+        width: 110,
+        height: 110,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+</script>
+```
+
+未加 inline 时
+
+```js
+/* 二维码生成 */
+var hostUrl = "127.0.0.1:8080";
+var url = /*/blog/85*/""; // 模板引擎的路径书写方式
+var qrcode = new QRCode("qrcode", {
+    // text: "http://jindo.dev.naver.com/collie",
+    text: hostUrl + url,
+    width: 110,
+    height: 110,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.H
+});
+```
+
+
+
+使用onclick跳转页面
+
+```html
+<h2 class="ui teal header item" onclick="javascript:window.location.href='/'">Blog</h2>
+```
+
+
+
+
+
+idea maven import 卡死：https://blog.csdn.net/weixin_44647868/article/details/97148498
+
+
+
+
+
+---
+
+
+
+后期搜索可做ES全文检索，排期吧
+
+后期各种静态图片改造成可配置的（使用配置文件或者oss）

@@ -4,6 +4,7 @@ import com.colm.blog.dao.BlogRepository;
 import com.colm.blog.exception.NotFoundException;
 import com.colm.blog.po.Blog;
 import com.colm.blog.po.Type;
+import com.colm.blog.util.MarkdownUtils;
 import com.colm.blog.util.MyBeanUtils;
 import com.colm.blog.vo.BlogQuery;
 import org.springframework.beans.BeanUtils;
@@ -33,6 +34,11 @@ public class BlogServiceImpl implements BlogService {
     @Autowired
     private BlogRepository blogRepository;
 
+    /**
+     * 根据id获取博客
+     * @param id
+     * @return
+     */
     @Transactional
     @Override
     public Blog getBlog(Long id) {
@@ -40,11 +46,13 @@ public class BlogServiceImpl implements BlogService {
     }
 
     /*
+    * 查询博客，查询条件为 title、type、recommend
     * blog.getType().getId 会有空指针异常，
     * 方式一：可以通过如下方式，此时使用的还是PO
     */
     @Transactional
     @Override
+    @Deprecated
     public Page<Blog> getList(Pageable pageable, Blog blog) {
         return blogRepository.findAll(pageable);
         /*return blogRepository.findAll(new Specification<Blog>() {
@@ -72,6 +80,7 @@ public class BlogServiceImpl implements BlogService {
 
     /*
     * 方式二：使用 VO
+    * 查询博客，查询条件为 title、type、recommend
     */
     @Override
     public Page<Blog> getList(Pageable pageable, BlogQuery blogQuery) {
@@ -95,6 +104,12 @@ public class BlogServiceImpl implements BlogService {
         }, pageable);
     }
 
+    /**
+     * saveBlog 更新时会丢失字段，改为使用此方法更新博客信息
+     * @param id
+     * @param blog
+     * @return
+     */
     @Transactional
     @Override
     public Blog updateBlog(Long id, Blog blog) {
@@ -109,6 +124,11 @@ public class BlogServiceImpl implements BlogService {
         return blogRepository.save(repositoryOne);
     }
 
+    /**
+     * 保存或更新博客
+     * @param blog
+     * @return
+     */
     @Transactional
     @Override
     public Blog saveBlog(Blog blog) {
@@ -133,16 +153,49 @@ public class BlogServiceImpl implements BlogService {
      * @param pageable
      * @return
      */
+    @Transactional
     @Override
     public Page<Blog> getList(Pageable pageable) {
+        // 返回所有已发布的博客
         blogRepository.getByPublished(pageable, true);
+        // 返回所有博客
         return blogRepository.findAll(pageable);
     }
 
+    @Transactional
     @Override
     public List<Blog> listRecommendTop(Integer size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "updateTime");
         PageRequest request = PageRequest.of(0, size, sort);
         return blogRepository.listRecommendTop(request);
+    }
+
+    /**
+     * 根据指定条件查询title及description
+     * @param pageable
+     * @param query
+     * @return
+     */
+    @Transactional
+    @Override
+    public Page<Blog> getList(Pageable pageable, String query) {
+        return blogRepository.findByQuery(pageable, query);
+    }
+
+    /**
+     * 获取blog的content，并转换为Markdown返回给页面
+     * @param id
+     * @return
+     */
+    @Transactional
+    @Override
+    public Blog getAndConvert(Long id) {
+        Blog blog = blogRepository.getById(id); // 此方法获取不到的时候返回 null。findOne返回Optional，getOne获取不到抛异常
+        Blog copy = new Blog(); // 新建一个对象，避免将转换结果写回数据库
+        BeanUtils.copyProperties(blog, copy);
+        String content = copy.getContent();
+        String result = MarkdownUtils.markdownToHtmlExtensions(content);// 此版本的第三方工具包，不会改变源文本，会返回一个修改后的结果
+        copy.setContent(result);
+        return copy;
     }
 }

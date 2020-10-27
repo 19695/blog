@@ -29,4 +29,9 @@ public interface BlogService {
     Page<Blog> getList(Pageable pageable);
 
     List<Blog> listRecommendTop(Integer size);
+
+    Page<Blog> getList(Pageable pageable, String query);
+
+    // 获取博客并转换格式
+    Blog getAndConvert(Long id);
 }

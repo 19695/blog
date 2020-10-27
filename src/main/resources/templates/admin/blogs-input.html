@@ -70,9 +70,9 @@
                            <i class="dropdown icon"></i>
                            <div class="text">原创</div>
                            <div class="menu">
-                               <div class="item" data-value="原创">原创</div>
-                               <div class="item" data-value="转载">转载</div>
-                               <div class="item" data-value="延展">延展</div>
+                               <div class="item" data-value="原创" th:data-value="原创">原创</div>
+                               <div class="item" data-value="转载" th:data-value="转载">转载</div>
+                               <div class="item" data-value="延展" th:data-value="延展">延展</div>
                            </div>
                        </div>
                        <input type="text" placeholder="标题" class="ui item" name="title" th:value="*{title}">      <!-- title -->
@@ -277,6 +277,13 @@
                     rules: [{
                         type: 'empty',
                         prompt: '分类：请选择博客分类'
+                    }]
+                },
+                flag: {
+                    identifier: 'flag',
+                    rules: [{
+                        type: 'empty',
+                        prompt: '类型：请选择博客类型'
                     }]
                 }
             },

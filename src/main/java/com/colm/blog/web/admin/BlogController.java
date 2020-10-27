@@ -100,7 +100,7 @@ public class BlogController {
     }
 
     /**
-     * 新增 blog 时的保存
+     * 新增、修改 blog 时的保存
      * @param blog
      * @param attributes
      * @param session
