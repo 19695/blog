@@ -22,6 +22,7 @@ public class Comment {
     private String avatar;
     @Temporal(TemporalType.TIMESTAMP)
     private Date createTime;
+    private boolean adminComment;
 
     @ManyToOne
     private Blog blog;
@@ -33,6 +34,14 @@ public class Comment {
     // 此时是“留言”，作为一的一侧
     @OneToMany(mappedBy = "parentComment")
     private List<Comment> replayComments = new ArrayList<>();
+
+    public boolean isAdminComment() {
+        return adminComment;
+    }
+
+    public void setAdminComment(boolean adminComment) {
+        this.adminComment = adminComment;
+    }
 
     public Comment() {
     }
@@ -109,15 +118,5 @@ public class Comment {
         this.replayComments = replayComments;
     }
 
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "id=" + id +
-                ", nickname='" + nickname + '\'' +
-                ", email='" + email + '\'' +
-                ", content='" + content + '\'' +
-                ", avatar='" + avatar + '\'' +
-                ", createTime=" + createTime +
-                '}';
-    }
+
 }

@@ -572,6 +572,96 @@ idea maven import 卡死：https://blog.csdn.net/weixin_44647868/article/details
 
 
 
+**JPA查询关键字** https://blog.csdn.net/lionel_zsj/article/details/98937678
+
+Spring Data JPA使用方法名可解决大部分的查询问题，但是也存在不能解决所有问题，以下是方法名中支持的关键字：
+
+| 关键字               | 简单示例                        | JPQL片段示例                                                 |
+| -------------------- | ------------------------------- | ------------------------------------------------------------ |
+| AND                  | findByLastNameAndFirstName      | WHERE Entity.lastName = ?1 AND Entity.firstName = ?2         |
+| IsNull               | findByAddressIsNull             | WHERE Entity.address is NULL                                 |
+| IsNotNull            | readByAddressIsNotNull          | WHERE Entity.address NOT NULL                                |
+| NotNull              | readByAddressNotNull            | WHERE Entity.address NOT NULL                                |
+| OR                   | readByLastNameOrFirstName       | WHERE Entity.lastName = ?1 OR Entity.firstName = ?2          |
+| Between              | getByStartDateBetween           | WHERE Entity.startDate BETWEEN ?1 AND ?2                     |
+| LessThan             | findByAgeLessThan               | WHERE Entity.age < ?1                                        |
+| GreaterThan          | readByAgeGreaterThan            | WHERE Entity.age > ?1                                        |
+| After`只作用在时间`  | findByStartDateAfter            | WHERE Entity.startDate > ?1                                  |
+| Before`只作用在时间` | findByStartDateBefore           | WHERE Entity.startDate < ?1                                  |
+| LessThanEqual        | findByAgeLessThenEqual          | WHERE Entity.age <= ?1                                       |
+| GreaterThanEqual     | readByAgeGreaterThenEqual       | WHERE Entity.age >= ?1                                       |
+| Is                   | findByLastNameIs                | WHERE Entity.lastName = ?1                                   |
+| Equal                | getByFirstNameEqual             | WHERE Entity.firstName = ?1                                  |
+| Like                 | findByNameLike                  | WHERE [Entity.name](http://entity.name/) LIKE ? `不包括'%'符号` |
+| Not Like             | findByNameNotLike               | WHERE [Entity.name](http://entity.name/) not like ?1 `不包括'%'符号` |
+| StartingWith         | readByNameStartingWith          | WHERE [Entity.name](http://entity.name/) like ‘?1%’`条件以'%'符号结尾` |
+| EndingWith           | readByName EndingWith           | WHERE [Entity.name](http://entity.name/) like ‘%?1’`条件以'%'符号开头` |
+| Containing           | getByNameContaining             | WHERE [Entity.name](http://entity.name/) like ‘%?1%’ `包含'%'符号` |
+| OrderBy              | findByAgeOrderByAddressDesc     | WHERE Entity.age = ? Order By Entity.address DESC            |
+| Not                  | readByAgeNot                    | WHERE Entity.age <> ?1 `不等于`                              |
+| In                   | findByNameIn(Collection name)   | WHERE [Entity.name](http://entity.name/) IN (?1 ,?2, ?3)     |
+| NotIn                | getByNameNotIn(Collection name) | WHERE [Entity.name](http://entity.name/) NOT IN (?1 ,?2, ?3) |
+| True                 | readByFloagTrue()               | WHERE Entity.floag = true                                    |
+| False                | readByFloagFalse()              | WHERE Entity.floag = false                                   |
+| IgnoreCase           | findByNameIgnoreCase            | WHERE UPPER([Entity.Name](http://entity.name/)) = UPPER(?1)  |
+
+
+
+Thymeleaf判断集合是否为空 https://blog.csdn.net/ymylsq1/article/details/106646435
+
+```html
+<div th:if="${#lists.isEmpty(myCart)}" ></div>
+<div th:if="${not #lists.isEmpty(myCart)}"></div>
+```
+
+
+
+IDEA直接跳转到方法的实现类  Ctrl + Alt + 鼠标左键
+
+
+
+jpa手写update
+
+李哥结论：@Modifying、@Query、@Transactional配合使用
+
+```java
+// 更新views
+@Transactional
+@Modifying
+@Query("update Blog b set b.views = b.views+1 where b.id = ?1")
+int updateViews(Long id);
+```
+
+> update需要配合@Modifying，且需要事务@Transactional（service或repository加都可以）
+
+只写了@Query
+
+```
+org.springframework.dao.InvalidDataAccessApiUsageException: org.hibernate.hql.internal.QueryExecutionRequestException: Not supported for DML operations [update com.colm.blog.po.Blog b set b.views = b.views+1 where b.id = ?1]; nested exception is java.lang.IllegalStateException: org.hibernate.hql.internal.QueryExecutionRequestException: Not supported for DML operations [update com.colm.blog.po.Blog b set b.views = b.views+1 where b.id = ?1]
+......
+Caused by: java.lang.IllegalStateException: org.hibernate.hql.internal.QueryExecutionRequestException: Not supported for DML operations [update com.colm.blog.po.Blog b set b.views = b.views+1 where b.id = ?1]
+......
+Caused by: org.hibernate.hql.internal.QueryExecutionRequestException: Not supported for DML operations [update com.colm.blog.po.Blog b set b.views = b.views+1 where b.id = ?1]
+......
+01:45:52.096 [http-nio-8080-exec-5] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver:199- Resolved [org.springframework.dao.InvalidDataAccessApiUsageException: org.hibernate.hql.internal.QueryExecutionRequestException: Not supported for DML operations [update com.colm.blog.po.Blog b set b.views = b.views+1 where b.id = ?1]; nested exception is java.lang.IllegalStateException: org.hibernate.hql.internal.QueryExecutionRequestException: Not supported for DML operations [update com.colm.blog.po.Blog b set b.views = b.views+1 where b.id = ?1]]
+```
+
+加上@Modifying
+
+```
+org.springframework.dao.InvalidDataAccessApiUsageException: Executing an update/delete query; nested exception is javax.persistence.TransactionRequiredException: Executing an update/delete query
+......
+Caused by: javax.persistence.TransactionRequiredException: Executing an update/delete query
+......
+01:52:44.095 [http-nio-8080-exec-1] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver:199- Resolved [org.springframework.dao.InvalidDataAccessApiUsageException: Executing an update/delete query; nested exception is javax.persistence.TransactionRequiredException: Executing an update/delete query]
+```
+
+> 此时加上事务，三者到齐异常解决
+
+我看了以后产生了疑问，查了一下，下面资料这哥们个人博客写了不少
+
+相关知识点：https://www.cnblogs.com/yihuihui/p/11071949.html
+
 
 
 ---
@@ -581,3 +671,21 @@ idea maven import 卡死：https://blog.csdn.net/weixin_44647868/article/details
 后期搜索可做ES全文检索，排期吧
 
 后期各种静态图片改造成可配置的（使用配置文件或者oss）
+
+后期优化，评论的时候用户头像可选，提供几种默认头像
+
+> 思路参考下来列表，且可参照用户邮箱查找历史头像，多个历史头像按时间倒序排列取最近的一个
+
+后期优化，发表评论定位到评论位置
+
+> 思路点击回复的时候通过js给当前位置添加标记，若是发表评论则不滚动
+
+后期优化，点击评论后输入框状态为回复，此时不想回复了想要直接发表评论，应实现切换
+
+> 思路添加一个取消回复button，回复的时候显示button，点击将表单重置
+
+后期可以对评论消息做后台管理，审核通过可以显示，可以标记仅管理员可见，可删除评论
+
+后期可加友链以及收藏的其他优秀作者的个人博客
+
+> 概念解释，友链即有人链接涉及到互换或友情展示。收藏个博即博客写得好或技术牛

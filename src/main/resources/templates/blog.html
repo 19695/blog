@@ -511,51 +511,65 @@ h5,h6{font-size:1em;}
                 <div id="comment-container" class="ui teal segment">
                     <!-- comment 组件 -->
                     <div th:fragment="commentList"><!-- 用于部分重新加载 -->
-                        <div class="ui threaded comments" style="max-width: 100%">
-                            <h3 class="ui dividing header">留言</h3>
-                            <div class="comment">
+                        <div class="ui threaded comments m-margin-tb-small" style="max-width: 100%">
+                            <h2 class="ui dividing header">留言</h2>
+                            <!-- 用来调试 -->
+                            <p hidden th:text="${comments}"></p>
+                            <p hidden th:text="${#lists.isEmpty(comments)}"></p>
+                            <p th:if="${#lists.isEmpty(comments)}"> 快来留下你的评论吧~</p>
+                            <div class="comment" th:each="comment : ${comments}">
                                 <a class="avatar">
-                                    <img src="https://picsum.photos/id/1/100/100">
+                                    <img src="https://picsum.photos/id/1/100/100" th:src="@{${comment.avatar}}">
                                 </a>
                                 <div class="content">
-                                    <a class="author">Elliot Fu</a>
+                                    <span class="author" th:text="${comment.nickname}">Elliot Fu</span>
+                                    <div class="ui mini basic teal left pointing label m-padded-mini" th:if="${comment.adminComment}">博主</div>
                                     <div class="metadata">
-                                        <span class="date">昨天 12:30AM</span>
+                                        <span class="date" th:text="${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}">昨天 12:30AM</span>
                                     </div>
                                     <div class="text">
-                                        <p>This has been very useful for my research. Thanks as well!</p>
+                                        <p th:text="${comment.content}">This has been very useful for my research. Thanks as well!</p>
                                     </div>
                                     <div class="actions">
                                         <!-- data-xxx 其中xxx有大写拿不到值 -->
-                                        <a class="reply" data-commentid="1" data-commentnickname="Elliot Fu" onclick="reply(this)">回复</a>
+                                        <a class="reply" data-commentid="1" data-commentnickname="Elliot Fu" onclick="reply(this)"
+                                        th:attr="data-commentid=${comment.id},data-commentnickname=${comment.nickname}">回复</a>
                                     </div>
                                 </div>
-                                <div class="comments">
-                                    <div class="comment">
+                                <p th:text="${comment.replayComments}" hidden></p><!-- 调试 -->
+                                <div class="comments" th:if="${not #lists.isEmpty(comment.replayComments)}">
+                                    <div class="comment" th:each="reply : ${comment.replayComments}">
                                         <a class="avatar">
-                                            <img src="https://picsum.photos/id/1/100/100">
+                                            <img src="https://picsum.photos/id/1/100/100" th:src="@{${reply.avatar}}">
                                         </a>
                                         <div class="content">
-                                            <a class="author">Jenny Hess</a>
+                                            <span class="author">
+                                                <span th:text="${reply.nickname}">Jenny Hess</span>
+                                                <div class="ui mini basic teal left pointing label m-padded-mini" th:if="${reply.adminComment}">博主</div>
+                                                <span class="m-teal" th:text="| @ ${reply.parentComment.nickname}|">@ Tom</span>
+                                                <div class="ui mini basic teal left pointing label m-padded-mini" th:if="${reply.parentComment.adminComment}">博主</div>
+                                            </span>
                                             <div class="metadata">
-                                                <span class="date">刚刚</span>
+                                                <span class="date" th:text="${#dates.format(reply.createTime, 'yyyy-MM-dd HH:mm')}">刚刚</span>
                                             </div>
-                                            <div class="text">
+                                            <div class="text" th:text="${reply.content}">
                                                 Elliot you are always so right :)
                                             </div>
                                             <div class="actions">
-                                                <a class="reply">回复</a>
+                                                <a class="reply" onclick="reply(this)" th:attr="data-commentid=${reply.id},data-commentnickname=${reply.nickname}">回复</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
+
                 <div class="ui form" id="comment-form">
-                    <input type="text" name="parentComment.id" th:value="-1" value="-1">
-                    <input type="text" name="blog.id" th:value="${blog.id}">
+                    <input type="hidden" name="parentComment.id" th:value="-1" value="-1">
+                    <input type="hidden" name="blog.id" th:value="${blog.id}">
                     <div class="field">
                         <textarea name="content" placeholder="请输入评论信息..."></textarea>
                     </div>
@@ -563,13 +577,13 @@ h5,h6{font-size:1em;}
                         <div class="field m-mobile-wide m-margin-bottom-small">
                             <div class="ui left icon input">
                                 <i class="user icon"></i>
-                                <input type="text" name="nickname" placeholder="姓名">
+                                <input type="text" name="nickname" placeholder="姓名" th:value="${session.user}!=null ? ${session.user.nickname}">
                             </div>
                         </div>
                         <div class="field m-mobile-wide m-margin-bottom-small">
                             <div class="ui left icon input">
                                 <i class="mail icon"></i>
-                                <input type="text" name="email" placeholder="邮箱">
+                                <input type="text" name="email" placeholder="邮箱" th:value="${session.user}!=null ? ${session.user.email}">
                             </div>
                         </div>
                         <!-- button 想要左右填充满需要 div和button 一起加m-mobile-wide -->
@@ -777,19 +791,22 @@ h5,h6{font-size:1em;}
 
         // ajax使用load
         function postData() {
-            $('#comment-container').load(/*[[@{/commonts}]]*/'', {
+            $('#comment-container').load(/*[[@{/comments}]]*/'', {
                 "parentComment.id" : $("[name='parentComment.id']").val(),
                 "blog.id" : $("[name='blog.id']").val(),
                 "nickname" : $("[name='nickname']").val().trim(),
                 "email" : $("[name='email']").val().trim(),
                 "content" : $("[name='content']").val(),
             }, function(responseTxt, statusTxt, xhr) { // xhr: XMLHttpRequest
-                alert(1);
                 clearContent();
                 $(window).scrollTo($('#comment-container'), 500);
-                aletr(2);
             });
         }
+
+        // 初始化评论
+        $(function () {
+            $('#comment-container').load(/*[[@{/comments/{id}(id=${blog.id})}]]*/'');
+        })
 
         function clearContent() {
             $("[name='content']").val('');

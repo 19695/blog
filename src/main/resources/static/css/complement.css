@@ -157,6 +157,10 @@ body {
 .m-black {
     color: #333 !important;
 }
+/* span内的文本UI没有给颜色，teal不生效，所以自定义一个样式 */
+.m-teal {
+    color: #00B5AD !important;
+}
 
 /*------ position -------*/
 .m-top-right {

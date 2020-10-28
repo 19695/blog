@@ -34,4 +34,8 @@ public interface BlogService {
 
     // 获取博客并转换格式
     Blog getAndConvert(Long id);
+
+    // 此方法获取不到的时候返回 null。findOne返回Optional，getOne获取不到抛异常
+    Blog getById(Long id);
+
 }

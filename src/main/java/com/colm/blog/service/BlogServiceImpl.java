@@ -191,11 +191,28 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public Blog getAndConvert(Long id) {
         Blog blog = blogRepository.getById(id); // 此方法获取不到的时候返回 null。findOne返回Optional，getOne获取不到抛异常
+        if (blog == null) {
+            throw new NotFoundException("该博客不存在");
+        }
         Blog copy = new Blog(); // 新建一个对象，避免将转换结果写回数据库
         BeanUtils.copyProperties(blog, copy);
         String content = copy.getContent();
         String result = MarkdownUtils.markdownToHtmlExtensions(content);// 此版本的第三方工具包，不会改变源文本，会返回一个修改后的结果
         copy.setContent(result);
+        // 每次被阅读都需要增加阅读数views
+        blogRepository.updateViews(id); // 它的返回值是影响了几条记录，不是更新后有多少浏览量
+        copy.setViews(copy.getViews()+1);
         return copy;
+    }
+
+    /**
+     * 此方法获取不到的时候返回 null。findOne返回Optional，getOne获取不到抛异常
+     * @param id
+     * @return
+     */
+    @Transactional
+    @Override
+    public Blog getById(Long id) {
+        return blogRepository.getById(id);
     }
 }
