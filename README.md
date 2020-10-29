@@ -664,6 +664,28 @@ Caused by: javax.persistence.TransactionRequiredException: Executing an update/d
 
 
 
+清理mysql测试数据
+
+```sql
+DELETE FROM t_blog WHERE id IN 
+(SELECT tt.id FROM 
+	(SELECT b.id FROM t_blog b WHERE b.id != 60 AND b.description IS NULL) AS tt
+);
+```
+
+查询、开启、禁用外键约束
+
+```sql
+-- 查询当前外键约束是否打开
+SELECT @@FOREIGN_KEY_CHECKS;
+-- 设置为1的时候外键约束是打开的，设置为0的时候外键约束是关闭的;
+SET FOREIGN_KEY_CHECKS=1;
+```
+
+
+
+
+
 ---
 
 
