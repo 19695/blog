@@ -38,4 +38,6 @@ public interface BlogService {
     // 此方法获取不到的时候返回 null。findOne返回Optional，getOne获取不到抛异常
     Blog getById(Long id);
 
+    Page<Blog> getListByTagId(Pageable pageable, Long tagId);
+
 }
