@@ -22,6 +22,10 @@ public interface BlogRepository extends JpaRepository<Blog, Long>, JpaSpecificat
     @Query("select b from Blog b where b.recommend = true")
     List<Blog> listRecommendTop(Pageable pageable);
 
+    // 从所有发布的博客中返回前几条
+    @Query("select b from Blog b where b.published = true")
+    List<Blog> listRecentlyTop(Pageable pageable);
+
     // 获取所有已发布的博客
     Page<Blog> getByPublished(Pageable pageable, Boolean published);
 

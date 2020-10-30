@@ -65,22 +65,23 @@
             </div>
             <div class="three wide column">
                 <h4 class="ui inverted header m-text-thin m-text-spaced">最新博客</h4>
-                <div class="ui inverted link list">
-                    <a href="#" class="item">用户故事</a>
-                    <a href="#" class="item">用户故事</a>
-                    <a href="#" class="item">用户故事</a>
+                <div id="recent-container">
+                    <div class="ui inverted link list" th:fragment="recentList">
+                        <a href="#" class="item" th:each="blog : ${recentBlogs}" th:href="@{/blog/{id}(id=${blog.id})}" th:text="${blog.title}">用户故事</a>
+                    </div>
                 </div>
-            </div><div class="three wide column">
-            <h4 class="ui inverted header m-text-thin m-text-spaced">联系我</h4>
-            <div class="ui inverted link list">
-                <a href="#" class="item">WeChat: xxxxx</a>
-                <a href="#" class="item">Mobile: xxxxx</a>
-                <a href="#" class="item">QQ: xxxxx</a>
             </div>
-        </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">WeChat: 当前无联系方式</a>
+                    <a href="#" class="item">Mobile: 当前无联系方式</a>
+                    <a href="#" class="item">QQ: 当前无联系方式</a>
+                </div>
+            </div>
             <div class="seven wide column">
                 <h4 class="ui inverted header m-text-thin m-text-spaced">Colm Alex</h4>
-                <p class="m-text-thin m-text-spaced m-opacity-mini">我也曾把光阴浪费甚至莽撞到视死如归，只因爱上你才渴望长命百岁。——陈小春《相依为命》</p>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">处于开发阶段，当前暂未进入正式使用阶段</p>
             </div>
         </div>
         <!-- 分割线 -->
@@ -89,6 +90,15 @@
     </div>
 </footer>
 
+<th:block th:fragment="script">
+    <!-- CDN导入jquery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <!-- CDN导入js -->
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script>
+        $('#recent-container').load("/blog/recent");
+    </script>
+</th:block>
 
 </body>
 </html>

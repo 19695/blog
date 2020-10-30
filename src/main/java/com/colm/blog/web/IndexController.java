@@ -30,18 +30,35 @@ public class IndexController {
     private TagService tagService;
 
     /**
-     * 跳转到首页
+     * 跳转到首页，页面地址，只包含以发布的博客
      * @param pageable
      * @param model
      * @return
      */
     @GetMapping({"/", "/blogs"})
     public String index(@PageableDefault(size = 8, sort = {"views"}, direction = Sort.Direction.DESC) Pageable pageable, Model model) {
-        model.addAttribute("page", blogService.getList(pageable));
-        model.addAttribute("topTypes", typeService.listTop(6));
-        model.addAttribute("topTags", typeService.listTop(10));
-        model.addAttribute("recommendBlogs", blogService.listRecommendTop(8));
+        model.addAttribute("page", blogService.getList(pageable, false));
+        show(model);
         return "index";
+    }
+
+    /**
+     * 隐藏的地址，包含未发布的博客
+     * @param pageable
+     * @param model
+     * @return
+     */
+    @GetMapping("/blogs/unpublished")
+    public String allBlogs(@PageableDefault(size = 8, sort = {"views"}, direction = Sort.Direction.DESC) Pageable pageable, Model model) {
+        model.addAttribute("page", blogService.getList(pageable, true));
+        show(model);
+        return "index";
+    }
+
+    private void show(Model model) {
+        model.addAttribute("topTypes", typeService.listTop(6));
+        model.addAttribute("topTags", tagService.listTop(10));
+        model.addAttribute("recommendBlogs", blogService.listRecommendTop(8));
     }
 
     /**
@@ -69,5 +86,26 @@ public class IndexController {
     public String blog(@PathVariable Long id, Model model) {
         model.addAttribute("blog", blogService.getAndConvert(id));
         return "blog";
+    }
+
+    /**
+     * about当前是静态页面，只要跳转到就可以，所以没有单独写在专有Controller
+     * 若后期有动态需求，可以进行重构
+     * @return
+     */
+    @GetMapping("/about")
+    public String about() {
+        return "about";
+    }
+
+    /**
+     * footer 中显示的最近博客
+     * @return
+     */
+    @GetMapping("/blog/recent")
+    public String recentBlog(Model model) {
+//        model.addAttribute("recentBlogs", blogService.listRecommendTop(4));
+        model.addAttribute("recentBlogs", blogService.listRecently(4));
+        return "_fragments :: recentList";
     }
 }

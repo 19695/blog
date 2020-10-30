@@ -662,8 +662,9 @@ h5,h6{font-size:1em;}
     </footer>
 
 
+    <th:block th:replace="_fragments :: script"></th:block>
 <!-- 这种写法html是注释掉的，thymeleaf模板引擎是可以处理的 -->
-<!--/*/<th:block th:replace="_fragments :: script">/*/-->
+<!--/*/<th:block th:replace="_fragments :: blog_script">/*/-->
     <!-- 注意导入顺序，许多UI框架都需要先导入jQuery，Semantic UI也是这样 -->
     <!-- CDN导入jquery -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>

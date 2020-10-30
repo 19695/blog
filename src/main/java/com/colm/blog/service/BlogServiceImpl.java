@@ -150,11 +150,14 @@ public class BlogServiceImpl implements BlogService {
      */
     @Transactional
     @Override
-    public Page<Blog> getList(Pageable pageable) {
-        // 返回所有已发布的博客
-        blogRepository.getByPublished(pageable, true);
-        // 返回所有博客
-        return blogRepository.findAll(pageable);
+    public Page<Blog> getList(Pageable pageable, Boolean showUnpublished) {
+        if (showUnpublished) {
+            // 返回所有博客
+            return blogRepository.findAll(pageable);
+        } else {
+            // 返回所有已发布的博客
+            return blogRepository.getByPublished(pageable, true);
+        }
     }
 
     @Transactional
@@ -163,6 +166,16 @@ public class BlogServiceImpl implements BlogService {
         Sort sort = Sort.by(Sort.Direction.DESC, "updateTime");
         PageRequest request = PageRequest.of(0, size, sort);
         return blogRepository.listRecommendTop(request);
+    }
+
+    /**
+     * 最近的发布的博客
+     * @return
+     */
+    @Override
+    public List<Blog> listRecently(Integer size) {
+        PageRequest pageRequest = PageRequest.of(0, size, Sort.by(Sort.Order.desc("updateTime")));
+        return blogRepository.listRecentlyTop(pageRequest);
     }
 
     /**

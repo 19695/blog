@@ -31,7 +31,7 @@
 <body>
 
 <!--导航-->
-<nav th:fragment="menu(page)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+<nav th:fragment="menu(page)" class="ui overlay inverted attached segment m-padded-tb-mini m-shadow-small" style="position: sticky; z-index: 9999">
     <div class="ui container">
         <!-- stackable 可堆叠的，移动端的时候可自适应 -->
         <div class="ui inverted secondary stackable menu">
@@ -73,10 +73,10 @@
             </div>
             <div class="three wide column">
                 <h4 class="ui inverted header m-text-thin m-text-spaced">最新博客</h4>
-                <div class="ui inverted link list">
-                    <a href="#" class="item">用户故事</a>
-                    <a href="#" class="item">用户故事</a>
-                    <a href="#" class="item">用户故事</a>
+                <div id="recent-container">
+                    <div class="ui inverted link list" th:fragment="recentList">
+                        <a href="#" class="item m-text-thin" th:each="blog : ${recentBlogs}" th:href="@{/blog/{id}(id=${blog.id})}" th:text="${blog.title}">用户故事</a>
+                    </div>
                 </div>
             </div><div class="three wide column">
             <h4 class="ui inverted header m-text-thin m-text-spaced">联系我</h4>
@@ -98,11 +98,16 @@
 </footer>
 
 <th:block th:fragment="script">
-    <!-- 注意导入顺序，许多UI框架都需要先导入jQuery，Semantic UI也是这样 -->
     <!-- CDN导入jquery -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
     <!-- CDN导入js -->
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script>
+        $('#recent-container').load("/blog/recent");
+    </script>
+</th:block>
+
+<th:block th:fragment="blog_script">
     <!-- 代码高亮 -->
     <script src="../static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
     <!-- 目录生成 -->

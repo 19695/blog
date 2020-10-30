@@ -27,9 +27,11 @@ public interface BlogService {
 
     void deleteBlog(Long id);
 
-    Page<Blog> getList(Pageable pageable);
+    Page<Blog> getList(Pageable pageable, Boolean showUnpublished);
 
     List<Blog> listRecommendTop(Integer size);
+
+    List<Blog> listRecently(Integer size);
 
     Page<Blog> getList(Pageable pageable, String query);
 
