@@ -50,132 +50,27 @@
                         <h3 class="ui teal header">归档</h3>
                     </div>
                     <div class="right aligned column">
-                        共 <h2 class="ui orange header m-inline-block m-text-thin"> 11 </h2> 篇
+                        共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${blogCount}"> 11 </h2> 篇
                     </div>
                 </div>
             </div>
 
             <!-- content -->
-            <h2 class="ui centered header">2017</h2>
-            <div class="ui fluid vertical menu">
-                <!-- item中一个文本一个图标默认就会文字在左图标在右分开 -->
-                <a href="#" target="_blank" class="item">
-                    <!-- 可以放在span中，这样就不会分开了 -->
-                    <span>
+            <th:block th:each="item : ${archives}">
+                <h2 class="ui centered header" th:text="${item.key}">2017</h2>
+                <div class="ui fluid vertical menu">
+                    <!-- item中一个文本一个图标默认就会文字在左图标在右分开 -->
+                    <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank" class="item" th:each="blog : ${item.value}">
+                        <!-- 可以放在span中，这样就不会分开了 -->
+                        <span>
                         <!-- 尽量我这里不用mini样式，我的mini显示有问题 -->
-                        <i class="small teal circle icon"></i>画画的北北
-                        <div class="ui teal basic left pointing label m-padded-tiny">9月03</div>
+                        <i class="small teal circle icon"></i><span th:text="${blog.title}">画画的北北</span>
+                        <div class="ui teal basic left pointing label m-padded-tiny" th:text="${#dates.format(blog.createTime, 'MMMdd')}">9月03</div>
                     </span>
-                    <div class="ui orange basic label m-padded-tiny">原创</div>
-                </a>
-                <a href="#" target="_blank" class="item">
-                    <!-- 可以放在span中，这样就不会分开了 -->
-                    <span>
-                        <!-- 尽量我这里不用mini样式，我的mini显示有问题 -->
-                        <i class="small teal circle icon"></i>画画的北北
-                        <div class="ui teal basic left pointing label m-padded-tiny">9月03</div>
-                    </span>
-                    <div class="ui orange basic label m-padded-tiny">原创</div>
-                </a>
-                <a href="#" target="_blank" class="item">
-                    <!-- 可以放在span中，这样就不会分开了 -->
-                    <span>
-                        <!-- 尽量我这里不用mini样式，我的mini显示有问题 -->
-                        <i class="small teal circle icon"></i>画画的北北
-                        <div class="ui teal basic left pointing label m-padded-tiny">9月03</div>
-                    </span>
-                    <div class="ui orange basic label m-padded-tiny">原创</div>
-                </a>
-                <a href="#" target="_blank" class="item">
-                    <!-- 可以放在span中，这样就不会分开了 -->
-                    <span>
-                        <!-- 尽量我这里不用mini样式，我的mini显示有问题 -->
-                        <i class="small teal circle icon"></i>画画的北北
-                        <div class="ui teal basic left pointing label m-padded-tiny">9月03</div>
-                    </span>
-                    <div class="ui orange basic label m-padded-tiny">原创</div>
-                </a>
-            </div>
-            <h2 class="ui centered header">2017</h2>
-            <div class="ui fluid vertical menu">
-                <!-- item中一个文本一个图标默认就会文字在左图标在右分开 -->
-                <a href="#" target="_blank" class="item">
-                    <!-- 可以放在span中，这样就不会分开了 -->
-                    <span>
-                        <!-- 尽量我这里不用mini样式，我的mini显示有问题 -->
-                        <i class="small teal circle icon"></i>画画的北北
-                        <div class="ui teal basic left pointing label m-padded-tiny">9月03</div>
-                    </span>
-                    <div class="ui orange basic label m-padded-tiny">原创</div>
-                </a>
-                <a href="#" target="_blank" class="item">
-                    <!-- 可以放在span中，这样就不会分开了 -->
-                    <span>
-                        <!-- 尽量我这里不用mini样式，我的mini显示有问题 -->
-                        <i class="small teal circle icon"></i>画画的北北
-                        <div class="ui teal basic left pointing label m-padded-tiny">9月03</div>
-                    </span>
-                    <div class="ui orange basic label m-padded-tiny">原创</div>
-                </a>
-                <a href="#" target="_blank" class="item">
-                    <!-- 可以放在span中，这样就不会分开了 -->
-                    <span>
-                        <!-- 尽量我这里不用mini样式，我的mini显示有问题 -->
-                        <i class="small teal circle icon"></i>画画的北北
-                        <div class="ui teal basic left pointing label m-padded-tiny">9月03</div>
-                    </span>
-                    <div class="ui orange basic label m-padded-tiny">原创</div>
-                </a>
-                <a href="#" target="_blank" class="item">
-                    <!-- 可以放在span中，这样就不会分开了 -->
-                    <span>
-                        <!-- 尽量我这里不用mini样式，我的mini显示有问题 -->
-                        <i class="small teal circle icon"></i>画画的北北
-                        <div class="ui teal basic left pointing label m-padded-tiny">9月03</div>
-                    </span>
-                    <div class="ui orange basic label m-padded-tiny">原创</div>
-                </a>
-            </div>
-            <h2 class="ui centered header">2017</h2>
-            <div class="ui fluid vertical menu">
-                <!-- item中一个文本一个图标默认就会文字在左图标在右分开 -->
-                <a href="#" target="_blank" class="item">
-                    <!-- 可以放在span中，这样就不会分开了 -->
-                    <span>
-                        <!-- 尽量我这里不用mini样式，我的mini显示有问题 -->
-                        <i class="small teal circle icon"></i>画画的北北
-                        <div class="ui teal basic left pointing label m-padded-tiny">9月03</div>
-                    </span>
-                    <div class="ui orange basic label m-padded-tiny">原创</div>
-                </a>
-                <a href="#" target="_blank" class="item">
-                    <!-- 可以放在span中，这样就不会分开了 -->
-                    <span>
-                        <!-- 尽量我这里不用mini样式，我的mini显示有问题 -->
-                        <i class="small teal circle icon"></i>画画的北北
-                        <div class="ui teal basic left pointing label m-padded-tiny">9月03</div>
-                    </span>
-                    <div class="ui orange basic label m-padded-tiny">原创</div>
-                </a>
-                <a href="#" target="_blank" class="item">
-                    <!-- 可以放在span中，这样就不会分开了 -->
-                    <span>
-                        <!-- 尽量我这里不用mini样式，我的mini显示有问题 -->
-                        <i class="small teal circle icon"></i>画画的北北
-                        <div class="ui teal basic left pointing label m-padded-tiny">9月03</div>
-                    </span>
-                    <div class="ui orange basic label m-padded-tiny">原创</div>
-                </a>
-                <a href="#" target="_blank" class="item">
-                    <!-- 可以放在span中，这样就不会分开了 -->
-                    <span>
-                        <!-- 尽量我这里不用mini样式，我的mini显示有问题 -->
-                        <i class="small teal circle icon"></i>画画的北北
-                        <div class="ui teal basic left pointing label m-padded-tiny">9月03</div>
-                    </span>
-                    <div class="ui orange basic label m-padded-tiny">原创</div>
-                </a>
-            </div>
+                        <div class="ui orange basic label m-padded-tiny" th:text="${blog.flag}">原创</div>
+                    </a>
+                </div>
+            </th:block>
 
         </div>
     </div>

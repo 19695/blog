@@ -18,9 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Colm on 2020/10/22
@@ -229,5 +227,28 @@ public class BlogServiceImpl implements BlogService {
                 return criteriaBuilder.equal(tags.get("id"), tagId);
             }
         }, pageable);
+    }
+
+    /**
+     * 归档
+     * @return
+     */
+    @Override
+    public Map<String, List<Blog>> archiveBlog() {
+        List<String> years = blogRepository.findGroupYear();
+        Map<String, List<Blog>> map = new LinkedHashMap<>();
+        for (String year : years) {
+            map.put(year, blogRepository.findByYear(year));
+        }
+        return map;
+    }
+
+    /**
+     * 统计博客数量
+     * @return
+     */
+    @Override
+    public Long countBlog() {
+        return blogRepository.count();
     }
 }

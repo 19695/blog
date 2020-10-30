@@ -684,6 +684,24 @@ SET FOREIGN_KEY_CHECKS=1;
 
 
 
+查询年份
+
+```sql
+SELECT DATE_FORMAT(b.create_time, '%Y') AS YEAR FROM t_blog b GROUP BY YEAR ORDER BY YEAR DESC;
+```
+
+查询指定年分的博客
+
+```sql
+SELECT * FROM t_blog b WHERE DATE_FORMAT(b.create_time, '%Y') = '2020';
+```
+
+
+
+
+
+简单打镜像方式：https://www.cnblogs.com/yslss/p/12985931.html
+
 
 
 ---
