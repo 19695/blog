@@ -1,6 +1,6 @@
 # blog
 
-blog 的 springboot 后端服务
+blog 的 springboot 后端服务，并且将前端模板整合进来
 
 ## Thymeleaf
 spring-boot-stater-thymeleaf 默认导入的版本是2.3
